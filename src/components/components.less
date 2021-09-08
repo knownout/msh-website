@@ -1,0 +1,136 @@
+@defaultLightColor: #e5deba;
+@defaultDarkColor: #1d1e2c;
+
+div.button {
+	position: relative;
+	display: flex;
+
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	width: fit-content;
+	height: fit-content;
+
+	cursor: pointer;
+	transition: 100ms ease all;
+
+	font-weight: 700;
+	color: rgba(#000, .65);
+
+	text-transform: uppercase;
+	text-align: center;
+
+	background-color: @defaultLightColor;
+	&:hover {
+		background-color: @defaultDarkColor;
+		color: rgba(#fff, .95);
+	}
+
+	padding: 20px;
+	&[is-small="true"] {
+		padding: 10px;
+	}
+
+	&.volumetric {
+		box-shadow: 4px 4px 0 0 rgba(@defaultDarkColor, .2), 8px 8px 0 0 rgba(@defaultDarkColor, .2);
+		text-shadow: 3px 3px 0 rgba(@defaultDarkColor, .2);
+
+		&:hover {
+			transform: translateY(4px);
+			box-shadow: 1px 1px 0 0 rgba(@defaultDarkColor, .2), 2px 2px 0 0 rgba(@defaultDarkColor, .2);
+			text-shadow: 0 0 0 rgba(@defaultDarkColor, .2);
+			background-color: darken(@defaultLightColor, 5%);
+			color: rgba(#000, .65);
+		}
+	}
+}
+
+div.content-block {
+	position: relative;
+	display: flex;
+
+	justify-content: center;
+	align-items: center;
+
+	&.column {
+		flex-direction: column;
+	}
+	&.row {
+		flex-direction: row;
+	}
+
+	flex-wrap: wrap;
+	&.nowrap {
+		flex-wrap: nowrap;
+		white-space: nowrap;
+	}
+}
+
+div.icon {
+	height: 32px;
+	width: fit-content;
+
+	font-weight: 500;
+	font-size: 14px;
+
+	transition: 100ms ease all;
+	cursor: pointer;
+
+	&:hover {
+		transform: scale(1.1, 1.1);
+		&.text {
+			transform: scale(1.01, 1.01);
+		}
+	}
+
+	img {
+		position: relative;
+		display: block;
+
+		width: 60%;
+		height: 60%;
+	}
+
+	div.icon-holder {
+		width: 32px;
+		height: 100%;
+	}
+
+	span.text {
+		padding: 0 10px;
+	}
+
+	&.static {
+		pointer-events: none;
+	}
+
+	&.right.text {
+		flex-direction: row-reverse;
+		img {
+			transform: scaleX(-1);
+		}
+	}
+
+	&.round-icon {
+		opacity: .95;
+		img {
+			opacity: .75;
+		}
+		border-radius: 16px;
+		background: rgba(darken(@defaultLightColor, 40%), .1);
+
+		div.icon-holder {
+			background: rgba(darken(@defaultLightColor, 40%), .1);
+			border-radius: 16px;
+		}
+
+		&:hover {
+			background: rgba(darken(@defaultLightColor, 40%), .15);
+		}
+	}
+
+	img[src$="telegram.svg"] {
+		transform: translateX(-2px);
+	}
+}
