@@ -1,3 +1,4 @@
+export const DefaultServerURL = "http://192.168.100.170/";
 export const configuration = {
 	titleNames: {
 		short: "МСХиПР ПМР",

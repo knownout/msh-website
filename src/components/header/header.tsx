@@ -1,29 +1,17 @@
 import React from "react";
-import { configuration } from "../configuration";
-import { DefaultServerURL } from "../utils";
+
+import { configuration } from "../../utils/configuration";
+import { DefaultServerURL } from "../../utils/configuration";
+
+import Icon from "../icon";
+import MobileMenu from "../mobile-menu/mobile-menu";
+import Navigation from "../navigation/navigation";
+
 import "./header.less";
 
-function Icon (props: { icon: string; className?: string | null; children?: string }) {
-	return (
-		<div
-			className={[
-				"icon round-icon content-block row nowrap",
-				props.children ? "text" : "",
-				props.className ? props.className : ""
-			]
-				.filter(e => e.length > 1)
-				.join(" ")
-				.trim()}
-		>
-			<div className="icon-holder content-block row nowrap">
-				<img src={DefaultServerURL + "/public/social-icons/" + props.icon + ".svg"} alt="" />
-			</div>
-			{props.children && <span className="text content-block row nowrap">{props.children}</span>}
-		</div>
-	);
+interface IHeaderProps {
+	element: React.RefObject<HTMLDivElement>;
 }
-
-interface IHeaderProps {}
 interface IHeaderState {
 	titleTextLength: "short" | "middle" | "full";
 	mobileMenu: boolean;
@@ -37,8 +25,8 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
 		headerHeight: 0,
 		mobileMenuOpen: false
 	};
+
 	private websiteTitles = configuration.titleNames;
-	private readonly headerComponentRef = React.createRef<HTMLDivElement>();
 
 	constructor (props: IHeaderProps) {
 		super(props);
@@ -52,17 +40,15 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
 			mobileMenu: boolean = true;
 
 		if (width <= 462) length = "short";
-		else if (width < 1108) length = "middle";
+		else if (width <= 1108) length = "middle";
 		else {
-			mobileMenu = false;
-			length = "full";
-			if (this.state.mobileMenuOpen) this.setState({ mobileMenuOpen: false });
+			[ mobileMenu, length ] = [ false, "full" ];
+			this.setState({ mobileMenuOpen: false });
 		}
 
-		if (this.headerComponentRef.current)
-			this.setState({ headerHeight: this.headerComponentRef.current.offsetHeight });
-
-		this.setState({ titleTextLength: length, mobileMenu });
+		this.setState({ titleTextLength: length, mobileMenu }, () => {
+			if (this.props.element.current) this.setState({ headerHeight: this.props.element.current.offsetHeight });
+		});
 	}
 
 	componentDidMount () {
@@ -76,8 +62,13 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
 
 	public render () {
 		return (
-			<header className="header-component content-block row" ref={this.headerComponentRef}>
-				<div className="header-content content-block row">
+			<header
+				className="header-component content-block row"
+				// ref={this.headerComponentRef}
+				data-blackout={this.state.mobileMenuOpen}
+			>
+				<div className="blackout" />
+				<div className="header-content content-block row" ref={this.props.element}>
 					<div className="content-block column" id="title-socials">
 						<div className="content-block row nowrap" id="logo-title-block">
 							<div className="msh-logotype">
@@ -104,27 +95,20 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
 					<div
 						className="content-block row"
 						id="mobile-menu"
-						is-shown={this.state.mobileMenu.toString()}
+						is-open={this.state.mobileMenu.toString()}
 						is-active={this.state.mobileMenuOpen.toString()}
-						onClick={() => {
-							this.setState({ mobileMenuOpen: !this.state.mobileMenuOpen });
-							if (this.headerComponentRef.current)
-								this.setState({ headerHeight: this.headerComponentRef.current.offsetHeight });
-						}}
+						onClick={() => this.setState({ mobileMenuOpen: !this.state.mobileMenuOpen })}
 					>
 						<div className="hamburger-line" />
 					</div>
 				</div>
-				<div
-					className="content-block column"
-					id="mobile-menu-content"
-					style={{ top: this.state.headerHeight, height: window.innerHeight - this.state.headerHeight }}
-					is-active={this.state.mobileMenu.toString()}
-					is-shown={this.state.mobileMenuOpen.toString()}
-				>
-					123
-				</div>
-				{/** <Navigation /> component here */}
+				<MobileMenu
+					open={this.state.mobileMenuOpen}
+					active={this.state.mobileMenu}
+					top={this.state.headerHeight}
+				/>
+
+				<Navigation />
 			</header>
 		);
 	}

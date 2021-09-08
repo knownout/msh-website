@@ -1,0 +1,84 @@
+@defaultLightColor: #e5deba;
+@defaultDarkColor: #1d1e2c;
+
+#mobile-menu-content {
+	position: absolute;
+	// display: flex;
+	display: block;
+
+	width: 100%;
+	max-width: 460px;
+	height: 87%;
+
+	right: 0;
+
+	z-index: 100;
+	padding: 20px;
+
+	justify-content: flex-start;
+
+	background: lighten(@defaultLightColor, 14%);
+	color: @defaultDarkColor;
+	font-weight: 500;
+
+	transform: translateX(110%);
+
+	opacity: 1;
+	transition: 200ms ease all;
+
+	overflow: hidden;
+	overflow-y: auto;
+
+	&[is-active="false"] {
+		display: none;
+	}
+
+	&[is-open="true"] {
+		transform: translateX(0);
+		opacity: 1;
+	}
+
+	box-shadow: -4px 0 0 0 rgba(#000, .1), -8px 0 0 0 rgba(#000, .1);
+	#buttons-holder {
+		gap: 15px;
+		margin-top: 20px;
+		white-space: normal;
+
+		div.button {
+			padding: 10px;
+		}
+
+		@media screen and (max-width: 310px) {
+			flex-wrap: wrap;
+			div.button {
+				padding: 15px;
+			}
+		}
+	}
+
+	#social-icons {
+		gap: 10px;
+
+		align-items: flex-end;
+
+		div.icon:not([source-icon="phone-call"]) {
+			display: none;
+		}
+
+		@media screen and (max-width: 462px) {
+			div.icon:not([source-icon="phone-call"]) {
+				display: flex;
+			}
+			justify-content: flex-end;
+		}
+	}
+
+	#mobile-menu-inner {
+		width: 100%;
+		max-height: 100%;
+		overflow: auto;
+		overflow-x: hidden;
+
+		padding: 20px 0;
+	}
+}
