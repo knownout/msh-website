@@ -6,40 +6,371 @@ nav#navigation {
 	display: flex;
 
 	width: 100%;
-	height: 40px;
+	height: fit-content;
+
+	flex-direction: column;
 
 	justify-content: center;
 	align-items: center;
-
-	background: @defaultDarkColor;
-	color: @defaultLightColor;
 
 	@media screen and (max-width: 1108px) {
 		display: none;
 	}
 
-	div.item {
+	div#navigation-content {
 		position: relative;
 		display: flex;
+
+		flex-direction: row;
+
+		width: 100%;
+		height: fit-content;
+
+		flex-wrap: wrap;
+
+		background: @defaultDarkColor;
+		color: @defaultLightColor;
 
 		justify-content: center;
 		align-items: center;
 
-		height: 100%;
+		overflow: unset;
+		z-index: 1000;
 
-		padding: 0 15px;
-		cursor: pointer;
+		div.point {
+			position: relative;
+			display: flex;
 
-		transition: 100ms ease all;
-		&:hover {
-			background: lighten(@defaultLightColor, 10%);
-			color: rgba(#000, .7);
+			width: fit-content;
+			height: 40px;
+
+			transition: 100ms ease all;
+
+			span.title {
+				position: relative;
+				display: flex;
+
+				justify-content: center;
+				align-items: center;
+
+				width: 100%;
+				height: 100%;
+
+				padding: 0 20px;
+				font-weight: 700;
+
+				font-size: 15px;
+				text-transform: uppercase;
+
+				transition: inherit;
+				cursor: pointer;
+			}
+
+			&:hover {
+				z-index: 2000;
+				span.title {
+					background: lighten(@defaultLightColor, 10%);
+					color: rgba(#000, .8);
+				}
+
+				div.container {
+					opacity: 1;
+					pointer-events: all;
+					bottom: -10px;
+				}
+			}
+
+			div.container {
+				position: absolute;
+				display: flex;
+
+				flex-direction: column;
+				transition: 100ms ease all;
+
+				width: fit-content;
+				max-width: 120%;
+				min-width: 100%;
+
+				left: 0;
+				bottom: -15px;
+
+				&.right {
+					right: 0;
+					left: unset;
+				}
+
+				transform: translateY(100%);
+
+				opacity: 0;
+				pointer-events: none;
+
+				background: @defaultDarkColor;
+				font-weight: 500;
+				font-size: 15px;
+				padding: 10px 0;
+
+				box-shadow: 3px 3px 0 0 rgba(#000, .2), -3px -3px 0 0 rgba(#000, .2);
+
+				&::before {
+					content: "";
+					position: absolute;
+					display: block;
+
+					width: calc(100% + 20px);
+					height: calc(100% + 20px);
+
+					top: -10px;
+					left: -10px;
+
+					background: transparent;
+				}
+
+				span.item,
+				span.sub-title,
+				span.sub-item {
+					position: relative;
+					display: flex;
+
+					font-weight: 500;
+
+					width: 100%;
+					padding: 5px 10px;
+					transition: 100ms ease all;
+					cursor: pointer;
+
+					&:hover {
+						background: lighten(@defaultLightColor, 10%);
+						color: rgba(#000, 1);
+					}
+
+					font-size: 14px;
+					max-width: 100%;
+					overflow: hidden;
+				}
+
+				div.sub-point {
+					position: relative;
+					display: flex;
+					font-size: 13px;
+
+					&:hover {
+						z-index: 99;
+						& > span.sub-title {
+							background: lighten(@defaultLightColor, 10%);
+							color: rgba(#000, .8);
+						}
+
+						& > div.sub-container {
+							opacity: 1;
+							transform: translateX(100%) translateY(-10px);
+							pointer-events: all;
+
+							&.left {
+								transform: translateX(-100%) translateY(-10px);
+							}
+						}
+					}
+
+					div.sub-container {
+						position: absolute;
+						display: flex;
+
+						flex-direction: column;
+						min-width: 100%;
+						max-width: 120%;
+						width: fit-content;
+
+						top: 0;
+						left: 0;
+
+						transition: 100ms ease all;
+
+						transform: translateX(100%) translateY(-15px);
+						background: @defaultDarkColor;
+						padding: 10px 0;
+
+						opacity: 0;
+						pointer-events: none;
+
+						box-shadow: 3px 3px 0 0 rgba(#000, .2);
+
+						&.left {
+							left: unset;
+							right: 0;
+
+							transform: translateX(-100%) translateY(-15px);
+							box-shadow: -3px 3px 0 0 rgba(#000, .2);
+						}
+
+						&.top {
+							top: unset;
+							bottom: -20px;
+						}
+
+						&::before {
+							content: "";
+							position: absolute;
+							display: block;
+
+							width: calc(100% + 20px);
+							height: calc(100% + 20px);
+
+							top: -10px;
+							left: -10px;
+
+							background: transparent;
+						}
+					}
+
+					span.sub-title::before {
+						position: absolute;
+						display: block;
+
+						width: 4px;
+						height: 4px;
+
+						background: lighten(@defaultLightColor, 10%);
+						content: "";
+
+						// opacity: ;
+
+						right: 6px;
+						top: calc(50% - 2px);
+						transform: rotate(45deg);
+					}
+				}
+			}
 		}
+	}
+}
 
-		span.title {
-			font-weight: 700;
-			text-transform: uppercase;
-			font-size: 15px;
+nav#navigation.mobile {
+	all: initial;
+
+	position: relative;
+	display: flex;
+
+	width: 100%;
+	height: 100%;
+
+	div#navigation-content {
+		flex-direction: column;
+
+		background: transparent;
+		color: @defaultDarkColor;
+
+		div.point {
+			width: 100%;
+			flex-direction: column;
+			height: fit-content;
+
+			span.title {
+				height: 40px;
+				background: rgba(#000, .16);
+			}
+
+			div.container {
+				position: relative;
+				transform: none;
+				opacity: 1;
+
+				bottom: unset;
+				right: unset;
+
+				left: 0;
+				top: 0;
+
+				&::before,
+				span.no-mobile {
+					display: none;
+				}
+
+				width: 100%;
+				height: fit-content;
+				pointer-events: all;
+
+				box-shadow: none;
+				background: transparent;
+
+				span.sub-title {
+					font-weight: 700;
+					opacity: .9;
+
+					background: rgba(#000, .08);
+				}
+
+				span.item,
+				span.sub-title,
+				span.sub-item {
+					&:hover {
+						background: darken(@defaultLightColor, 6%);
+						color: rgba(#000, 1);
+					}
+				}
+
+				div.sub-point {
+					flex-direction: column;
+
+					&:hover {
+						z-index: 99;
+						& > span.sub-title {
+							background: darken(@defaultLightColor, 6%);
+							color: rgba(#000, .8);
+						}
+
+						& > div.sub-container {
+							opacity: 1;
+							transform: none;
+							pointer-events: all;
+
+							&.left {
+								transform: none;
+							}
+						}
+					}
+
+					div.sub-container {
+						position: relative;
+						box-shadow: none;
+
+						&::before {
+							display: none;
+						}
+
+						right: unset;
+						bottom: unset;
+
+						left: 0;
+						top: 0;
+						transform: none;
+
+						span.no-mobile {
+							display: none;
+						}
+
+						opacity: 1;
+						pointer-events: all;
+						background: transparent;
+
+						span.sub-item {
+							padding-left: 40px;
+						}
+					}
+				}
+			}
+
+			&:hover {
+				span.title {
+					background: darken(@defaultLightColor, 6%);
+					color: rgba(#000, .8);
+				}
+
+				div.container {
+					opacity: 1;
+					pointer-events: all;
+					bottom: -10px;
+				}
+			}
 		}
 	}
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { configuration } from "../../utils/configuration";
 
 import Icon from "../icon";
+import Navigation from "../navigation/navigation";
 
 import "./mobile-menu.less";
 
@@ -39,6 +40,7 @@ export default class MobileMenu extends React.Component<IMobileMenuProps, IMobil
 						<Icon icon="phone-call">{configuration.contacts.phone}</Icon>
 						<Icon icon="email">{configuration.contacts.email}</Icon>
 					</div>
+					<Navigation mobileView={true} />
 					<div className="content-block row nowrap" id="buttons-holder">
 						<div className="button volumetric">Виртуальная приемная</div>
 						<div className="button volumetric">Горячие линии</div>

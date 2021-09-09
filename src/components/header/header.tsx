@@ -108,7 +108,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
 					top={this.state.headerHeight}
 				/>
 
-				<Navigation />
+				<Navigation mobileView={false} />
 			</header>
 		);
 	}

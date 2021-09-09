@@ -1,38 +1,173 @@
 import React from "react";
+import { configuration } from "../../utils/configuration";
 
 import "./navigation.less";
 
-interface INavigationState {}
-interface INavigationProps {}
+interface INavigationState {
+	navigationTab: string | null;
+}
+interface INavigationProps {
+	mobileView: boolean;
+}
 export default class Navigation extends React.Component<INavigationProps, INavigationState> {
-	public state: INavigationState = {};
+	public state: INavigationState = {
+		navigationTab: null
+	};
 	constructor (props: INavigationProps) {
 		super(props);
 	}
 
 	public render () {
 		return (
-			<nav className="content-block column" id="navigation">
-				<div className="item">
-					<span className="title">Министерство</span>
-				</div>
-				<div className="item">
-					<span className="title">Деятельность</span>
-				</div>
-				<div className="item">
-					<span className="title">Документы</span>
-				</div>
-				<div className="item">
-					<span className="title">Господдержка</span>
-				</div>
-				<div className="item">
-					<span className="title">Информация</span>
-				</div>
-				<div className="item">
-					<span className="title">Контроль</span>
-				</div>
-				<div className="item">
-					<span className="title">Контакты</span>
+			<nav id="navigation" className={this.props.mobileView ? "mobile" : "default"}>
+				<div
+					className="content-block row"
+					id="navigation-content"
+					onClick={e => {
+						console.log(e.target);
+					}}
+				>
+					<div className="point">
+						<span className="title">Министерство</span>
+						<div className="container">
+							<div className="sub-point">
+								<span className="sub-title">О Министерстве</span>
+								<div className="sub-container">
+									<span className="sub-item">Руководство</span>
+									<span className="sub-item">Положение</span>
+									<span className="sub-item">Структура</span>
+								</div>
+							</div>
+							<span className="item">Государственные услуги</span>
+							<span className="item">Государственная гражданская служба</span>
+							<span className="item">Общественный экологический совет</span>
+							<span className="item">Общественный совет</span>
+							<span className="item">СМИ</span>
+						</div>
+					</div>
+
+					<div className="point">
+						<span className="title">Деятельность</span>
+						<div className="container">
+							<span className="item">Основные направления деятельности</span>
+							<span className="item">Инвестиционная деятельность</span>
+						</div>
+					</div>
+
+					<div className="point">
+						<span className="title">Документы</span>
+						<div className="container">
+							<div className="sub-point">
+								<span className="sub-title">Документы министерства</span>
+								<div className="sub-container">
+									<span className="sub-item">Тендеры</span>
+									<span className="sub-item">Конкурсы</span>
+									<span className="sub-item">Тарифы</span>
+									<span className="sub-item">Закупки</span>
+									<span className="sub-item">Формы обращений, заявлений</span>
+									<span className="sub-item">Реестры, каталоги, списки, классификаторы</span>
+									<span className="sub-item">Зареги-стрированные ветпрепараты</span>
+									<div className="sub-point">
+										<span className="sub-title no-mobile">Еще...</span>
+										<div className="sub-container top">
+											<span className="sub-item">План-график нормативно-правовой работы</span>
+											<span className="sub-item">Проекты, внесенные в ВС ПМР</span>
+											<span className="sub-item">Проекты для общественного обсуждения</span>
+											<span className="sub-item">Порядок обжалования правовых актов</span>
+											<span className="sub-item">Государственные символы</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div className="sub-point">
+								<span className="sub-title">Правовые акты</span>
+								<div className="sub-container">
+									<span className="sub-item">Агро-промышленный комплекс</span>
+									<span className="sub-item">Ветеринария и фитосанитария</span>
+									<div className="sub-point">
+										<span className="sub-title">Природные ресурсы</span>
+										<div className="sub-container top">
+											<span className="sub-item">Законы</span>
+											<span className="sub-item">Указы Президента</span>
+											<span className="sub-item">Постановления</span>
+											<span className="sub-item">Распоряжения Президента</span>
+											<span className="sub-item">Распоряжения Правительства</span>
+											<span className="sub-item">Приказы Министра</span>
+											<span className="sub-item">Распоряжения Министра</span>
+										</div>
+									</div>
+									<div className="sub-point">
+										<span className="sub-title">Общее направление</span>
+										<div className="sub-container top">
+											<span className="sub-item">Законы</span>
+											<span className="sub-item">Указы Президента</span>
+											<span className="sub-item">Постановления Правительства</span>
+											<span className="sub-item">Распоряжения Правительства</span>
+											<span className="sub-item">Приказы Министра</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div className="point">
+						<span className="title">Господдержка</span>
+						<div className="container">
+							<span className="item">Государственные программы в области АПК</span>
+							<span className="item">Планы в области АПК</span>
+							<span className="item">Государственные программы в области природопользования</span>
+							<span className="item">Планы в области природопользования</span>
+							<span className="item">Льготы</span>
+						</div>
+					</div>
+
+					<div className="point">
+						<span className="title">Информация</span>
+						<div className="container">
+							<span className="item">Новости</span>
+							<span className="item">Отчеты</span>
+							<span className="item">Доклады</span>
+							<span className="item">Мониторинг</span>
+							<span className="item">Проверки</span>
+							<span className="item">Статистика</span>
+							<span className="item">Издания</span>
+							<span className="item">Расчетные счета банков при оплате штрафов</span>
+							<span className="item">Экологический бюллетень</span>
+							<div className="sub-point">
+								<span className="sub-title">Помощь</span>
+								<div className="sub-container top left">
+									<span className="sub-item">Агро-промышленный комплекс</span>
+									<span className="sub-item">Ветеринария</span>
+									<span className="sub-item">Водные и рыбные ресурсы</span>
+									<span className="sub-item">Земельные отношения</span>
+									<span className="sub-item">Лесные и охотничьи ресурсы</span>
+									<span className="sub-item">Мелиорация</span>
+									<span className="sub-item">Фитосанитарное благополучие</span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div className="point">
+						<span className="title">Контроль</span>
+						<div className="container right">
+							<span className="item">В области государственного земельного контроля (надзора)</span>
+							<span className="item">В области деятельности фитосанитарного контроля (надзора)</span>
+						</div>
+					</div>
+
+					<div className="point">
+						<span className="title">Контакты</span>
+						<div className="container right">
+							<span className="item">Адрес и схема проезда</span>
+							<span className="item">Телефонный справочник Министерства</span>
+							<span className="item">Пресс-секретарь министра</span>
+							<span className="item">Обращения граждан</span>
+							<span className="item no-mobile">Виртуальная приемная</span>
+							<span className="item no-mobile">Горячие линии</span>
+						</div>
+					</div>
 				</div>
 			</nav>
 		);
