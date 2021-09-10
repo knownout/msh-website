@@ -4,9 +4,12 @@ import "./root.less";
 import ReactDOM from "react-dom";
 import React from "react";
 import Header from "./components/header/header";
-import Navigation from "./components/navigation/navigation";
+
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import "./components/navigation/navigation.less";
+import TitlePage from "./pages/title/title";
+import NotMatchPage from "./pages/not-match/not-match";
 
 interface AppState {
 	headerHeight: number;
@@ -23,29 +26,43 @@ class App extends React.Component<AppProps, AppState> {
 	}
 
 	private readonly headerElementRef = React.createRef<HTMLDivElement>();
-	private readonly mainElementRef = React.createRef<HTMLDivElement>();
 
 	private handleWindowResize () {
-		if (!this.headerElementRef.current) return;
+		setTimeout(() => {
+			if (!this.headerElementRef.current) return;
 
-		const height = this.headerElementRef.current.offsetHeight;
-		this.setState({ headerHeight: height });
+			const height = this.headerElementRef.current.offsetHeight;
+			this.setState({ headerHeight: height });
+		});
 	}
 
 	componentDidMount () {
-		this.handleWindowResize();
 		window.addEventListener("resize", this.handleWindowResize);
+		this.handleWindowResize();
 	}
 
 	public render () {
 		const height = window.innerHeight - this.state.headerHeight;
+
 		return (
-			<React.Fragment>
+			<Router>
 				<div className="screen-size-locker">
-					<span className="text">Разрешение или размер экрана устройства не поддерживается</span>
+					<span className="text">Разрешение экрана устройства не поддерживается</span>
 				</div>
 				<Header element={this.headerElementRef} />
-			</React.Fragment>
+
+				<div id="page-data-container" style={{ height }}>
+					<Switch>
+						<Route exact path="/">
+							<TitlePage />
+						</Route>
+						<Route path="/документы/правовые-акты/общее-направление/законы">Hello world</Route>
+						<Route path="*">
+							<NotMatchPage />
+						</Route>
+					</Switch>
+				</div>
+			</Router>
 		);
 	}
 }

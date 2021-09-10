@@ -12,5 +12,16 @@ export const configuration = {
 		email: "minagro@ecology-pmr.org",
 		phone: "+373 (533) 26-74-5",
 		fax: "+373 (533) 27-89-6"
+	},
+
+	notMatchMessage: [
+		"Запрошенная страница не найдена или удалена. Проверьте правильность введенной ссылки и повторите попытку.",
+		"Если ссылка введена верно и Вы в этом уверены, сообщите в основной аппарат Министерства."
+	],
+
+	socialLinks: {
+		telegram: "https://web.telegram.org/",
+		viber: "https://www.viber.com/ru/",
+		facebook: "https://www.facebook.com/"
 	}
 };

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import { configuration } from "../../utils/configuration";
 import { DefaultServerURL } from "../../utils/configuration";
@@ -60,26 +61,44 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
 		window.removeEventListener("resize", this.windowResizeHandler);
 	}
 
+	// TODO: If mobile menu bugs appear, there may be an error here. (ref: header || .header-content)
 	public render () {
 		return (
 			<header
 				className="header-component content-block row"
 				// ref={this.headerComponentRef}
 				data-blackout={this.state.mobileMenuOpen}
+				ref={this.props.element}
 			>
 				<div className="blackout" />
-				<div className="header-content content-block row" ref={this.props.element}>
+				<div className="header-content content-block row">
 					<div className="content-block column" id="title-socials">
-						<div className="content-block row nowrap" id="logo-title-block">
-							<div className="msh-logotype">
-								<img src={DefaultServerURL + "/public/favicon.ico"} alt="Логотип МСХиПР ПМР" />
+						<Link to="/" className="block">
+							<div className="content-block row nowrap" id="logo-title-block">
+								<div className="msh-logotype">
+									<img src={DefaultServerURL + "/public/favicon.ico"} alt="Логотип МСХиПР ПМР" />
+								</div>
+								<div className="msh-title">{this.websiteTitles[this.state.titleTextLength]}</div>
 							</div>
-							<div className="msh-title">{this.websiteTitles[this.state.titleTextLength]}</div>
-						</div>
+						</Link>
 						<div className="content-block row" id="social-icons-title">
-							<Icon icon="telegram" />
-							<Icon icon="viber" />
-							<Icon icon="facebook" />
+							<Link
+								to={{ pathname: configuration.socialLinks.telegram }}
+								target="_blank"
+								className="icon"
+							>
+								<Icon icon="telegram" />
+							</Link>
+							<Link to={{ pathname: configuration.socialLinks.viber }} target="_blank" className="icon">
+								<Icon icon="viber" />
+							</Link>
+							<Link
+								to={{ pathname: configuration.socialLinks.facebook }}
+								target="_blank"
+								className="icon"
+							>
+								<Icon icon="facebook" />
+							</Link>
 							<Icon icon="email">{configuration.contacts.email}</Icon>
 						</div>
 					</div>

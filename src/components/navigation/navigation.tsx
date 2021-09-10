@@ -17,6 +17,39 @@ export default class Navigation extends React.Component<INavigationProps, INavig
 		super(props);
 	}
 
+	private getParentalRoute (e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+		const target = e.target as HTMLElement;
+		const clickableItem = [ "title", "sub-item", "item", "sub-title" ]
+			.map(e => target.classList.contains(e))
+			.reduce((a, b) => a || b);
+
+		if (!clickableItem) return;
+
+		const getParentTitle = (object: HTMLElement) =>
+			((object.parentElement as HTMLElement).parentElement as HTMLElement).querySelector("span") as HTMLElement;
+
+		const firstParent = getParentTitle(target),
+			secondParent = getParentTitle(firstParent.parentElement as HTMLElement),
+			thirdParent = getParentTitle(secondParent.parentElement as HTMLElement);
+
+		const titleItems = Array.from((target.closest("nav#navigation") as HTMLElement).querySelectorAll(
+			"span.title"
+		) as NodeListOf<HTMLElement>).map(e => e.innerText.toLocaleLowerCase());
+
+		let parentalPath: string[] = [ firstParent, secondParent, thirdParent ]
+			.map(e => e.innerText)
+			.filter(e => e != target.innerText);
+		parentalPath = parentalPath.filter((e, pos) => parentalPath.indexOf(e) == pos);
+		parentalPath = parentalPath.reverse();
+		parentalPath.push(target.innerHTML);
+		parentalPath = parentalPath.map(e =>
+			e.replace(/\([^)]*\)/gi, "").trim().replace(/\s{2,}/gi, " ").replace(/\s/gi, "-").toLocaleLowerCase()
+		);
+
+		if (titleItems.includes(parentalPath[1])) parentalPath = parentalPath.slice(1);
+		return "/" + parentalPath.join("/");
+	}
+
 	public render () {
 		return (
 			<nav id="navigation" className={this.props.mobileView ? "mobile" : "default"}>
@@ -24,7 +57,8 @@ export default class Navigation extends React.Component<INavigationProps, INavig
 					className="content-block row"
 					id="navigation-content"
 					onClick={e => {
-						console.log(e.target);
+						const route = this.getParentalRoute(e);
+						if (route) window.location.href = route;
 					}}
 				>
 					<div className="point">

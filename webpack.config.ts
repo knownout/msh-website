@@ -126,6 +126,7 @@ function defaultServerConfiguration ({
 		host,
 		port,
 
+		hot: true,
 		writeToDisk: true,
 		historyApiFallback: true,
 		publicPath: "/"
