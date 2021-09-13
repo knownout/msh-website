@@ -41,9 +41,7 @@ export default class DefaultPage extends React.Component<IDefaultPageProps, IDef
 
 	async componentDidMount () {
 		const location = window.location.pathname;
-		const pageContent: DataProp = await fetch(
-			DefaultServerURL + `articles/articles.php?action=get&path=` + location
-		)
+		const pageContent: DataProp = await fetch(DefaultServerURL + `api/articles.php?action=get&path=` + location)
 			.then(req => req.json())
 			.catch(() => {
 				this.setState({ contentLoaded: true });
