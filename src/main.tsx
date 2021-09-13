@@ -3,21 +3,26 @@ import "./root.less";
 
 import ReactDOM from "react-dom";
 import React from "react";
-import Header from "./components/header/header";
+import Header, { Logotype } from "./components/header/header";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import "./components/navigation/navigation.less";
-import TitlePage from "./pages/title/title";
+import TitlePage from "./pages/title-page/title-page";
 import NotMatchPage from "./pages/not-match/not-match";
+import DefaultPage from "./pages/default-page/default-page";
+import Footer from "./components/footer/footer";
+import { configuration, DefaultServerURL } from "./utils/configuration";
 
 interface AppState {
 	headerHeight: number;
+	pageWidth: number;
 }
 interface AppProps {}
 class App extends React.Component<AppProps, AppState> {
 	public readonly state: AppState = {
-		headerHeight: 0
+		headerHeight: 0,
+		pageWidth: 0
 	};
 	constructor (props: AppProps) {
 		super(props);
@@ -32,7 +37,7 @@ class App extends React.Component<AppProps, AppState> {
 			if (!this.headerElementRef.current) return;
 
 			const height = this.headerElementRef.current.offsetHeight;
-			this.setState({ headerHeight: height });
+			this.setState({ headerHeight: height, pageWidth: window.innerWidth });
 		});
 	}
 
@@ -54,13 +59,16 @@ class App extends React.Component<AppProps, AppState> {
 				<div id="page-data-container" style={{ height }}>
 					<Switch>
 						<Route exact path="/">
-							<TitlePage />
+							<TitlePage height={height} />
 						</Route>
-						<Route path="/документы/правовые-акты/общее-направление/законы">Hello world</Route>
+						{/* <Route path="/документы/правовые-акты/общее-направление/законы">Hello world</Route> */}
 						<Route path="*">
-							<NotMatchPage />
+							<DefaultPage height={height} />
 						</Route>
 					</Switch>
+					<Footer>
+						<Logotype width={this.state.pageWidth} />
+					</Footer>
 				</div>
 			</Router>
 		);

@@ -10,6 +10,30 @@ import Navigation from "../navigation/navigation";
 
 import "./header.less";
 
+export function Logotype (props: {
+	width: number;
+	onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+}) {
+	let length: "short" | "middle" | "full";
+	if (props.width <= 462) length = "short";
+	else if (props.width <= 1108) length = "middle";
+	else length = "full";
+
+	return (
+		<div
+			className="content-block row nowrap"
+			id="logo-title-block"
+			onClick={props.onClick}
+			style={{ cursor: props.onClick ? "pointer" : "default" }}
+		>
+			<div className="msh-logotype">
+				<img src={DefaultServerURL + "/public/favicon.ico"} alt="Логотип МСХиПР ПМР" />
+			</div>
+			<div className="msh-title">{configuration.titleNames[length]}</div>
+		</div>
+	);
+}
+
 interface IHeaderProps {
 	element: React.RefObject<HTMLDivElement>;
 }
@@ -73,14 +97,12 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
 				<div className="blackout" />
 				<div className="header-content content-block row">
 					<div className="content-block column" id="title-socials">
-						<Link to="/" className="block">
-							<div className="content-block row nowrap" id="logo-title-block">
-								<div className="msh-logotype">
-									<img src={DefaultServerURL + "/public/favicon.ico"} alt="Логотип МСХиПР ПМР" />
-								</div>
-								<div className="msh-title">{this.websiteTitles[this.state.titleTextLength]}</div>
-							</div>
-						</Link>
+						<Logotype
+							width={window.innerWidth}
+							onClick={() => {
+								window.location.pathname = "/";
+							}}
+						/>
 						<div className="content-block row" id="social-icons-title">
 							<Link
 								to={{ pathname: configuration.socialLinks.telegram }}
@@ -99,7 +121,13 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
 							>
 								<Icon icon="facebook" />
 							</Link>
-							<Icon icon="email">{configuration.contacts.email}</Icon>
+							<Link
+								to={{ pathname: "mailto:" + configuration.contacts.email }}
+								target="_blank"
+								className="icon"
+							>
+								<Icon icon="email">{configuration.contacts.email}</Icon>
+							</Link>
 						</div>
 					</div>
 					<div className="content-block column" id="title-buttons">

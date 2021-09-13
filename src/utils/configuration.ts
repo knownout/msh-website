@@ -23,5 +23,20 @@ export const configuration = {
 		telegram: "https://web.telegram.org/",
 		viber: "https://www.viber.com/ru/",
 		facebook: "https://www.facebook.com/"
-	}
+	},
+
+	monthsName: [
+		"январь",
+		"февраль",
+		"март",
+		"апрель",
+		"май",
+		"июнь",
+		"июль",
+		"август",
+		"сентябрь",
+		"октябрь",
+		"ноябрь",
+		"декабрь"
+	]
 };

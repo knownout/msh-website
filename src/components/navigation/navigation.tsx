@@ -47,6 +47,8 @@ export default class Navigation extends React.Component<INavigationProps, INavig
 		);
 
 		if (titleItems.includes(parentalPath[1])) parentalPath = parentalPath.slice(1);
+
+		if (parentalPath.length <= 1) return;
 		return "/" + parentalPath.join("/");
 	}
 

@@ -77,6 +77,11 @@ div.icon {
 	transition: 100ms ease all;
 	cursor: pointer;
 
+	color: rgba(#000, .98);
+	&.light {
+		color: @defaultLightColor;
+	}
+
 	&:hover {
 		transform: scale(1.1, 1.1);
 		&.text {
@@ -127,6 +132,24 @@ div.icon {
 
 		&:hover {
 			background: rgba(darken(@defaultLightColor, 40%), .15);
+		}
+
+		&.light {
+			background: rgba(@defaultLightColor, .1);
+
+			div.icon-holder {
+				background: rgba(@defaultLightColor, .1);
+				border-radius: 16px;
+			}
+
+			&:hover {
+				background: rgba(@defaultLightColor, .15);
+			}
+
+			img {
+				filter: invert(80%) sepia(200%);
+				opacity: 0.8;
+			}
 		}
 	}
 

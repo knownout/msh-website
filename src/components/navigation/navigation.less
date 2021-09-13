@@ -63,7 +63,7 @@ nav#navigation {
 				text-transform: uppercase;
 
 				transition: inherit;
-				cursor: pointer;
+				cursor: default;
 			}
 
 			&:hover {
@@ -200,6 +200,10 @@ nav#navigation {
 
 							transform: translateX(-100%) translateY(-15px);
 							box-shadow: -3px 3px 0 0 rgba(#000, .2);
+
+							&::before {
+								left: -10px;
+							}
 						}
 
 						&.top {
@@ -212,11 +216,11 @@ nav#navigation {
 							position: absolute;
 							display: block;
 
-							width: calc(100% + 20px);
+							width: calc(100% + 10px);
 							height: calc(100% + 20px);
 
 							top: -10px;
-							left: -10px;
+							left: 0;
 
 							background: transparent;
 						}
@@ -237,6 +241,7 @@ nav#navigation {
 						right: 6px;
 						top: calc(50% - 2px);
 						transform: rotate(45deg);
+						pointer-events: none;
 					}
 				}
 			}

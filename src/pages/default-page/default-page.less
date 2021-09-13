@@ -1,0 +1,183 @@
+div.page-wrapper {
+	position: relative;
+	display: flex;
+
+	flex-direction: column;
+	width: 100%;
+	height: fit-content;
+	padding: 20px;
+
+	overflow: hidden;
+	// overflow-y: auto;
+
+	width: 100%;
+	text-align: justify;
+
+	user-select: text;
+
+	// justify-content: center;
+	align-items: center;
+	min-height: calc(100% - 40px);
+
+	div.page-content {
+		position: relative;
+		display: block;
+
+		max-width: 860px;
+
+		width: fit-content;
+
+		height: fit-content;
+		// flex-direction: column;
+	}
+
+	// padding-top: 6%;
+	padding-top: 40px;
+	&[data-centered="true"] {
+		justify-content: center;
+	}
+
+	font-weight: 500;
+	opacity: .8;
+
+	line-height: 23px;
+
+	p {
+		margin: 0;
+		margin-bottom: 10px;
+
+		&::first-letter {
+			margin-left: 20px;
+		}
+	}
+
+	.cdx-marker,
+	.inline-code,
+	a {
+		background: rgba(rgb(255, 255, 109), .7);
+		padding: 1px 2px;
+		border-radius: 4px;
+
+		transition: 100ms ease all;
+	}
+
+	a {
+		color: rgb(60, 124, 196);
+		background: transparent;
+		padding: 2px 3px;
+
+		&:hover {
+			background: rgba(60, 124, 196, .13);
+		}
+	}
+
+	.inline-code {
+		background: rgba(#000, .1);
+	}
+
+	figure {
+		position: relative;
+		display: flex;
+
+		flex-direction: column;
+		width: 100%;
+		height: fit-content;
+
+		margin: 20px 0;
+		border-radius: 5px;
+
+		overflow: hidden;
+
+		&.image-block--with-border {
+			border: 1px dashed rgba(#000, .28);
+		}
+
+		&.image-block--stretched img {
+			width: 100%;
+		}
+
+		&.image-block--with-background {
+			background: rgba(#000, .05);
+
+			justify-content: center;
+			align-items: center;
+
+			padding: 10px;
+		}
+
+		&:not(.image-block--with-background).image-block--with-border {
+			border: none;
+			img {
+				border: 1px dashed rgba(#000, .28);
+			}
+		}
+
+		img {
+			position: relative;
+			display: block;
+
+			width: 100%;
+			height: fit-content;
+
+			overflow: hidden;
+			border-radius: 4px;
+		}
+
+		figcaption {
+			position: relative;
+			display: flex;
+
+			flex-wrap: wrap;
+
+			font-size: 14px;
+			margin-top: 5px;
+
+			width: 100%;
+			justify-content: center;
+			height: fit-content;
+
+			opacity: 0.8;
+		}
+	}
+
+	ul {
+		margin: 6px 0;
+	}
+
+	hr {
+		position: relative;
+		display: block;
+
+		margin: 30px 0;
+		width: calc(100% - 40px);
+		left: 20px;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		margin: 0;
+		font-weight: 700;
+
+		opacity: 0.95;
+		padding: 10px 0;
+
+		line-height: initial;
+	}
+
+	h2,
+	h3 {
+		padding: 6px 0;
+		padding-top: 10px;
+	}
+
+	h4,
+	h5,
+	h6 {
+		padding: 3px 0;
+		padding-top: 5px;
+	}
+}

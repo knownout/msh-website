@@ -1,0 +1,108 @@
+@defaultLightColor: #e5deba;
+@defaultDarkColor: #1d1e2c;
+
+footer#content-footer {
+	position: relative;
+	display: flex;
+
+	width: 100%;
+	height: fit-content;
+
+	flex-direction: row;
+	flex-wrap: wrap;
+
+	padding: 100px;
+	background: @defaultDarkColor;
+
+	color: @defaultLightColor;
+	font-size: 14px;
+	font-weight: 500;
+
+	#logo-title-block {
+		// justify-content: flex-start;
+		margin-bottom: 20px;
+
+		div.msh-title {
+			color: @defaultLightColor;
+			max-width: 320px;
+		}
+
+		div.msh-logotype {
+			height: 40px;
+			width: 40px;
+
+			box-shadow: 3px 3px 0 0 rgba(#fff, .2), 6px 6px 0 0 rgba(#fff, .2);
+		}
+	}
+
+	div.content-left {
+		gap: 20px;
+		align-items: flex-start;
+
+		div.footer-social-icons {
+			gap: 10px;
+			justify-content: flex-start;
+			align-items: center;
+
+			max-width: 560px;
+			width: fit-content;
+		}
+
+		div.content-block.column {
+			align-items: flex-start;
+			gap: 20px;
+		}
+	}
+
+	div.content-right {
+		margin-left: auto;
+
+		div#qr-code-location-data img {
+			filter: invert(80%) sepia(90%);
+			opacity: .8;
+
+			width: 180px;
+			height: 180px;
+		}
+
+		div#text-location-data {
+			align-items: flex-end;
+			line-height: 22px;
+			user-select: text;
+
+			span:first-child {
+				font-weight: 700;
+			}
+
+			a {
+				transition: 100ms ease all;
+				margin-top: 12px;
+				font-weight: 700;
+				color: rgb(95, 166, 247);
+				background: transparent;
+
+				&:hover {
+					color: rgb(151, 199, 255);
+				}
+			}
+		}
+	}
+
+	@media screen and (max-width: 1008px) {
+		padding: 80px 10px;
+
+		div.content-right {
+			margin-left: initial;
+			width: 100%;
+			margin-top: 40px;
+		}
+		div.content-left {
+			width: 100%;
+			align-items: center;
+
+			div.footer-social-icons {
+				justify-content: center;
+			}
+		}
+	}
+}

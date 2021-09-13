@@ -22,6 +22,7 @@
 		"@types/webpack-dev-server": "^3.10.0",
 		"autoprefixer": "^9.7.4",
 		"css-loader": "^3.4.2",
+		"editorjs-blocks-react-renderer": "^1.1.1",
 		"enzyme": "^3.11.0",
 		"enzyme-adapter-react-16": "^1.15.2",
 		"html-webpack-plugin": "^3.2.0",
@@ -52,7 +53,11 @@
 			"autoprefixer": {}
 		}
 	},
-	"browserslist": [ "last 2 versions", "IE 10-11", "> 0.1%" ],
+	"browserslist": [
+		"last 2 versions",
+		"IE 10-11",
+		"> 0.1%"
+	],
 	"scripts": {
 		"build": "webpack -p --mode=\"production\"",
 		"dev-server": "webpack-dev-server --mode=\"development\" --",

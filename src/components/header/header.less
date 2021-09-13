@@ -1,6 +1,34 @@
 @defaultLightColor: #e5deba;
 @defaultDarkColor: #1d1e2c;
 
+#logo-title-block {
+	gap: 20px;
+
+	div.msh-logotype {
+		position: relative;
+		display: flex;
+
+		width: 48px + 12px;
+		height: 48px + 12px;
+
+		background: rgba(#fff, .9);
+		padding: 6px;
+
+		box-shadow: 4px 4px 0 0 rgba(#000, .2), 8px 8px 0 0 rgba(#000, .2);
+		transform: translateY(-2px);
+	}
+
+	div.msh-title {
+		font-weight: 700;
+		// text-transform: uppercase;
+
+		color: rgba(#000, .7);
+		max-width: 480px;
+
+		white-space: normal;
+	}
+}
+
 header.header-component {
 	height: fit-content;
 	width: 100%;
@@ -49,34 +77,6 @@ header.header-component {
 		gap: 20px;
 		#social-icons-title {
 			gap: 10px;
-		}
-
-		#logo-title-block {
-			gap: 20px;
-
-			div.msh-logotype {
-				position: relative;
-				display: flex;
-
-				width: 48px + 12px;
-				height: 48px + 12px;
-
-				background: rgba(#fff, .9);
-				padding: 6px;
-
-				box-shadow: 4px 4px 0 0 rgba(#000, .2), 8px 8px 0 0 rgba(#000, .2);
-				transform: translateY(-2px);
-			}
-
-			div.msh-title {
-				font-weight: 700;
-				// text-transform: uppercase;
-
-				color: rgba(#000, .7);
-				max-width: 480px;
-
-				white-space: normal;
-			}
 		}
 	}
 
