@@ -9,10 +9,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import "./components/navigation/navigation.less";
 import TitlePage from "./pages/title-page/title-page";
-import NotMatchPage from "./pages/not-match/not-match";
 import DefaultPage from "./pages/default-page/default-page";
 import Footer from "./components/footer/footer";
-import { configuration, DefaultServerURL } from "./utils/configuration";
 
 interface AppState {
 	headerHeight: number;

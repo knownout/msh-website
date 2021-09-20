@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { configuration, DefaultServerURL } from "../../utils/configuration";
+import { configuration } from "../../utils";
 import Icon from "../icon";
 import "./footer.less";
 
@@ -64,7 +64,7 @@ export default class Footer extends React.Component<IFooterProps, IFooterState> 
 						<Link to="#">Схема проезда</Link>
 					</div>
 					<div className="content-block row" id="qr-code-location-data">
-						<img src={DefaultServerURL + "/public/location-code.svg"} alt="" />
+						<img src={configuration.api.server_path + "/public/location-code.svg"} alt="" />
 					</div>
 				</div>
 			</footer>

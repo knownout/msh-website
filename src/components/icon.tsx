@@ -1,5 +1,5 @@
 import React from "react";
-import { DefaultServerURL } from "../utils/configuration";
+import { configuration } from "../utils";
 
 export default function Icon (props: { icon: string; className?: string | null; children?: string }) {
 	return (
@@ -15,7 +15,7 @@ export default function Icon (props: { icon: string; className?: string | null; 
 				.trim()}
 		>
 			<div className="icon-holder content-block row nowrap">
-				<img src={DefaultServerURL + "/public/social-icons/" + props.icon + ".svg"} alt="" />
+				<img src={configuration.api.server_path + "/public/social-icons/" + props.icon + ".svg"} alt="" />
 			</div>
 			{props.children && <span className="text content-block row nowrap">{props.children}</span>}
 		</div>

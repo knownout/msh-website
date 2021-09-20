@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { configuration } from "../../utils/configuration";
-import { DefaultServerURL } from "../../utils/configuration";
+import { configuration } from "../../utils";
 
 import Icon from "../icon";
 import MobileMenu from "../mobile-menu/mobile-menu";
@@ -27,7 +26,7 @@ export function Logotype (props: {
 			style={{ cursor: props.onClick ? "pointer" : "default" }}
 		>
 			<div className="msh-logotype">
-				<img src={DefaultServerURL + "/public/favicon.ico"} alt="Логотип МСХиПР ПМР" />
+				<img src={configuration.api.server_path + "/public/favicon.ico"} alt="Логотип МСХиПР ПМР" />
 			</div>
 			<div className="msh-title">{configuration.titleNames[length]}</div>
 		</div>
