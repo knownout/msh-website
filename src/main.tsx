@@ -11,6 +11,7 @@ import "./components/navigation/navigation.less";
 import TitlePage from "./pages/title-page/title-page";
 import DefaultPage from "./pages/default-page/default-page";
 import Footer from "./components/footer/footer";
+import CMS from "./cms/cms";
 
 interface AppState {
 	headerHeight: number;
@@ -28,7 +29,26 @@ class App extends React.Component<AppProps, AppState> {
 		this.handleWindowResize = this.handleWindowResize.bind(this);
 	}
 
+	private readonly scrollableElementRef = React.createRef<HTMLDivElement>();
 	private readonly headerElementRef = React.createRef<HTMLDivElement>();
+
+	private wheelEventHandler (event: WheelEvent) {
+		const elementUnderCursor = document.elementFromPoint(event.clientX, event.clientY);
+		const menu = (elementUnderCursor as Element).closest("div.scroll-menu");
+
+		if (menu) {
+			if (!menu.scrollLeft && event.deltaY < 0) return true;
+			if (
+				menu.scrollLeft < menu.scrollWidth - menu.clientWidth ||
+				(menu.scrollLeft < menu.scrollWidth && event.deltaY < 0)
+			) {
+				event.preventDefault();
+				return false;
+			}
+		}
+
+		return true;
+	}
 
 	private handleWindowResize () {
 		setTimeout(() => {
@@ -42,6 +62,9 @@ class App extends React.Component<AppProps, AppState> {
 	componentDidMount () {
 		window.addEventListener("resize", this.handleWindowResize);
 		this.handleWindowResize();
+
+		if (this.scrollableElementRef.current)
+			this.scrollableElementRef.current.addEventListener("wheel", this.wheelEventHandler, { passive: false });
 	}
 
 	public render () {
@@ -49,25 +72,31 @@ class App extends React.Component<AppProps, AppState> {
 
 		return (
 			<Router>
-				<div className="screen-size-locker">
-					<span className="text">Разрешение экрана устройства не поддерживается</span>
-				</div>
-				<Header element={this.headerElementRef} />
+				<Switch>
+					<Route exact path="/admin-panel">
+						<CMS />
+					</Route>
+					<Route path="*">
+						<div className="screen-size-locker">
+							<span className="text">Разрешение экрана устройства не поддерживается</span>
+						</div>
+						<Header element={this.headerElementRef} />
 
-				<div id="page-data-container" style={{ height }}>
-					<Switch>
-						<Route exact path="/">
-							<TitlePage height={height} />
-						</Route>
-						{/* <Route path="/документы/правовые-акты/общее-направление/законы">Hello world</Route> */}
-						<Route path="*">
-							<DefaultPage height={height} />
-						</Route>
-					</Switch>
-					<Footer>
-						<Logotype width={this.state.pageWidth} />
-					</Footer>
-				</div>
+						<div id="page-data-container" style={{ height }} ref={this.scrollableElementRef}>
+							<Switch>
+								<Route exact path="/">
+									<TitlePage height={height} />
+								</Route>
+								<Route path="*">
+									<DefaultPage height={height} />
+								</Route>
+							</Switch>
+							<Footer>
+								<Logotype width={this.state.pageWidth} />
+							</Footer>
+						</div>
+					</Route>
+				</Switch>
 			</Router>
 		);
 	}

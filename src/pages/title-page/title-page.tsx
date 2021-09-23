@@ -5,8 +5,11 @@ import ScrollMenu from "../../components/scroll-menu";
 import { configuration } from "../../utils";
 import { getTextTime } from "../../utils";
 import ExceptionPage from "../exception/exception";
+import Blocks, { DataProp } from "editorjs-blocks-react-renderer";
 
 import "./title-page.less";
+
+type TArticle = { meta: { content: { [key: string]: any }; preview?: string }; success: boolean };
 
 interface ITitlePageProps {
 	height: number;
@@ -18,6 +21,8 @@ interface ITitlePageState {
 
 	mainPageData: { [key: string]: any };
 	mainArticleData: { [key: string]: any };
+
+	articlesList: TArticle[];
 }
 
 export default class TitlePage extends React.Component<ITitlePageProps, ITitlePageState> {
@@ -26,7 +31,8 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 		exception: false,
 
 		mainArticleData: {},
-		mainPageData: {}
+		mainPageData: {},
+		articlesList: []
 	};
 
 	constructor (props: ITitlePageProps) {
@@ -54,15 +60,21 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 				const preview: string = mainArticle.meta.preview;
 
 				const articlesList = this.state.mainPageData.meta.articles;
+				const fetchedArticlesList = [] as TArticle[];
+
 				for await (const article of articlesList) {
 					const articleData = await fetch(
 						configuration.api.server_path + configuration.api.get_articles + article
 					).then(res => res.json());
 
-					console.log(articleData); //TODO
+					fetchedArticlesList.push(articleData);
 				}
 
-				this.setState({ mainArticleData: { date, title, preview }, loaded: true });
+				this.setState({
+					mainArticleData: { date, title, preview },
+					loaded: true,
+					articlesList: fetchedArticlesList
+				});
 			}
 		}
 	}
@@ -77,6 +89,10 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 		}
 
 		const bgImage = { backgroundImage: `url("${this.state.mainArticleData.preview}")` } as React.CSSProperties;
+		const articlesListPreviewText = this.state.articlesList.map(e => {
+			return e.meta.content.blocks.filter((i: any) => i.type == "paragraph")[0].data.text;
+		});
+
 		return (
 			<PageWrapper {...this.props} loaded={this.state.loaded} id="title-page" exception={this.state.exception}>
 				{this.state.loaded && (
@@ -105,7 +121,32 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 							</div>
 						</div>
 						<div className="content-block row" id="latest-articles">
-							<ScrollMenu />
+							<ScrollMenu childrenWidth={340}>
+								{this.state.articlesList.map((e, i) => (
+									<div
+										className="article content-block column"
+										key={Math.random()}
+										data-bg={!!e.meta.preview}
+									>
+										{e.meta.preview && (
+											<div
+												className="bg-image"
+												style={{ backgroundImage: `url(${e.meta.preview})` }}
+											/>
+										)}
+
+										<div className="content">
+											{articlesListPreviewText[i] + " " + articlesListPreviewText[i]}
+										</div>
+
+										<span className="date">{getTextTime(e.meta.content.time as number)}</span>
+										<span className="title">{e.meta.content.title}</span>
+									</div>
+								))}
+							</ScrollMenu>
+							<div className="button-wrapper">
+								<div className="button">Архив новостей</div>
+							</div>
 						</div>
 					</React.Fragment>
 				)}

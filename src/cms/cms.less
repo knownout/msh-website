@@ -1,0 +1,51 @@
+@defaultLightColor: #e5deba;
+@defaultDarkColor: #1d1e2c;
+
+div#cms-root {
+	background: lighten(@defaultLightColor, 10%);
+}
+
+div.button.form-submit {
+	padding: 10px;
+
+	text-transform: initial;
+	font-size: 14px;
+
+	border-radius: 3px;
+
+	&.fail {
+		@keyframes failAnimation {
+			0% {
+				transform: translateX(0);
+			}
+			33% {
+				transform: translateX(-10px);
+			}
+			66% {
+				transform: translateX(10px);
+			}
+			99% {
+				transform: translateX(0);
+			}
+		}
+
+		animation: failAnimation 300ms ease forwards;
+		background: rgba(red, .75);
+	}
+
+	&.wait {
+		background: rgba(#444, .3);
+		opacity: .6;
+
+		pointer-events: none;
+	}
+}
+
+.white-block {
+	border-radius: 4px;
+	background: lighten(@defaultLightColor, 15%);
+
+	box-shadow: 2.8px 2.8px 2.2px rgba(0, 0, 0, 0.006), 6.7px 6.7px 5.3px rgba(0, 0, 0, 0.008),
+		12.5px 12.5px 10px rgba(0, 0, 0, 0.01), 22.3px 22.3px 17.9px rgba(0, 0, 0, 0.012),
+		41.8px 41.8px 33.4px rgba(0, 0, 0, 0.014), 100px 100px 80px rgba(0, 0, 0, 0.02);
+}

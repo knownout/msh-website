@@ -15,7 +15,7 @@ export function getTextTime (timestamp: number) {
 
 export const configuration = {
 	minHeight: 520,
-	minWidth: 220,
+	minWidth: 320,
 
 	titleNames: {
 		short: "МСХиПР ПМР",
@@ -63,6 +63,7 @@ export const configuration = {
 	api: {
 		get_articles: "api/articles.php?action=get&path=",
 		server_path: "http://192.168.100.170/",
-		fetch_title_page: "api/fetch-title-page-data.php"
+		fetch_title_page: "api/fetch-title-page-data.php",
+		authorization: "api/auth.php?login="
 	}
 };

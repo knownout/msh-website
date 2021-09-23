@@ -23,7 +23,8 @@ export default function ScrollMenu (props: { children?: any; childrenWidth?: num
 			setMouseLock(false);
 
 			if (!childrenWidth) return;
-			const nearestPosition = childrenWidth * Math.round(scrollMenuElement.current.scrollLeft / childrenWidth);
+			const nearestPosition =
+				childrenWidth * Math.round(scrollMenuElement.current.scrollLeft / (childrenWidth - 0));
 			scrollMenuElement.current.scrollTo({
 				left: nearestPosition,
 				behavior: "smooth"
@@ -41,13 +42,34 @@ export default function ScrollMenu (props: { children?: any; childrenWidth?: num
 		touch: [ "start", "end", "move" ]
 	};
 
-	const eventNamesList: { [key: string]: typeof onPointerLock } = {};
+	const eventNamesList: {
+		[key: string]: typeof onPointerLock | ((event: React.WheelEvent<HTMLDivElement>) => void);
+	} = {};
 	for (const event in relatedEvents)
 		relatedEvents[event].forEach(e => (eventNamesList[`on${Capitalize(event)}${Capitalize(e)}`] = onPointerLock));
 
+	eventNamesList["onWheel"] = (event: React.WheelEvent<HTMLDivElement>) => {
+		if (!childrenWidth || !scrollMenuElement.current) return;
+
+		const nearestPosition =
+			childrenWidth *
+			Math.round(
+				(scrollMenuElement.current.scrollLeft + (event.deltaY > 0 ? childrenWidth : -childrenWidth)) /
+					childrenWidth
+			);
+		scrollMenuElement.current.scrollTo({
+			left: nearestPosition,
+			behavior: "smooth"
+		});
+	};
+
 	return (
-		<div className="scroll-menu" {...eventNamesList} ref={scrollMenuElement}>
-			{props.children}
+		<div className="scroll-menu-wrapper">
+			<div className="scroll-left" />
+			<div className="scroll-menu" {...eventNamesList} ref={scrollMenuElement}>
+				{props.children}
+			</div>
+			<div className="scroll-right" />
 		</div>
 	);
 }
