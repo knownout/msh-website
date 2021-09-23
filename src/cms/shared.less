@@ -1,0 +1,127 @@
+// Стандартный набор цветов для форм
+@defaultLightColor: #e5deba;
+@defaultDarkColor: #1d1e2c;
+
+// На сколько будет осветлён светлый цвет для более светлых компонентов
+@defaultLightenPercent: 16%;
+
+.styled-block {
+	padding: 10px;
+	box-shadow: 1.3px 1.5px 1.5px rgba(0, 0, 0, 0.005), 2.9px 3.5px 3.3px rgba(0, 0, 0, 0.008),
+		5px 6.1px 5.8px rgba(0, 0, 0, 0.009), 7.9px 9.6px 9.1px rgba(0, 0, 0, 0.011),
+		12.2px 14.9px 14.1px rgba(0, 0, 0, 0.013), 19px 23.2px 22px rgba(0, 0, 0, 0.014),
+		31.5px 38.5px 36.5px rgba(0, 0, 0, 0.016), 63px 77px 73px rgba(0, 0, 0, 0.02);
+
+	background: lighten(@defaultLightColor, @defaultLightenPercent);
+	border-radius: 4px;
+	overflow: hidden;
+
+	/**
+     * Маленькая кнопка с дополнительными: эффектом встряхивания,
+     * эффектом наведения и выключенным состоянием
+     */
+	div.button {
+		padding: 8px;
+		border-radius: 4px;
+		text-transform: none;
+
+		font-size: 14px;
+
+		// Анимация встряхивания кнопки
+		@keyframes fail-animation {
+			33% {
+				transform: translateX(-5px);
+			}
+			66% {
+				transform: translateX(5px);
+			}
+			99% {
+				transform: translateX(0);
+			}
+		}
+
+		&:hover,
+		&:focus-visible {
+			background: #d4ceaf;
+			color: rgba(#000, .75);
+
+			/**
+             * Если кнопка специальная, то эффект наведения
+             * будет как у обычной конки с сайта
+            */
+			&.special {
+				background: @defaultDarkColor;
+				color: rgba(#fff, .95);
+			}
+		}
+
+		// Включение анимации встряхивания
+		&.fail {
+			animation: fail-animation 300ms ease forwards;
+			background: rgba(darken(red, 10%), .7);
+			// color: rgba(#fff, .75);
+		}
+
+		// Отключенное состояние кнопки
+		&.disabled {
+			pointer-events: none;
+			opacity: .5;
+			background: rgba(#444, .4);
+		}
+	}
+
+	// Стили для полей ввода текста
+	input[type="text"],
+	input[type="password"] {
+		border: unset;
+		padding: 10px;
+
+		border-radius: 4px;
+		font-size: 14px;
+		font-weight: 500;
+
+		// Сгенерировано при помощи: shadows.brumm.af
+		box-shadow: 0 0.3px 1.5px rgba(0, 0, 0, 0.009), 0 0.8px 3.9px rgba(0, 0, 0, 0.013),
+			0 1.6px 8px rgba(0, 0, 0, 0.017), 0 3.3px 16.4px rgba(0, 0, 0, 0.021), 0 9px 45px rgba(0, 0, 0, 0.03);
+
+		transition: 100ms ease all;
+		opacity: .8;
+
+		// Затемнять при наведении и фокусе
+		&:hover,
+		&:focus {
+			background: darken(#fff, 12%);
+			opacity: 1;
+		}
+	}
+}
+
+div#cms-root {
+	position: fixed;
+	display: block;
+
+	width: 100%;
+	height: 100%;
+
+	top: 0;
+	left: 0;
+
+	overflow: hidden;
+
+	// Фон в два раза темнее, чем светлые элементы
+	background: lighten(@defaultLightColor, @defaultLightenPercent / 2);
+
+	div#cms-content-wrapper {
+		position: relative;
+		display: flex;
+
+		width: 100%;
+		height: 100%;
+
+		justify-content: center;
+		align-items: center;
+
+		overflow: hidden;
+		overflow-y: auto;
+	}
+}

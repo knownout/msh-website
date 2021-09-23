@@ -11,7 +11,7 @@ import "./components/navigation/navigation.less";
 import TitlePage from "./pages/title-page/title-page";
 import DefaultPage from "./pages/default-page/default-page";
 import Footer from "./components/footer/footer";
-import CMS from "./cms/cms";
+import CMSRoot from "./cms/cms";
 
 interface AppState {
 	headerHeight: number;
@@ -74,7 +74,8 @@ class App extends React.Component<AppProps, AppState> {
 			<Router>
 				<Switch>
 					<Route exact path="/admin-panel">
-						<CMS />
+						{/* <CMS /> */}
+						<CMSRoot />
 					</Route>
 					<Route path="*">
 						<div className="screen-size-locker">

@@ -1,75 +1,131 @@
+// Основные модули
 import React from "react";
-import { configuration } from "../utils";
-import "./cms.less";
 
+// Подключение общего контента
+import { TAccountData, CMSInternalConfiguration as config, Request } from ".";
+import { configuration as app_config } from "../utils";
+
+// Библиотеки
 import CryptoJS from "crypto-js";
-import AuthForm from "./auth-form/auth-form";
-import MainForm from "./main-form/main-form";
 
-export type TAccountAuthData = {
-	authState: boolean;
-	accountLevel?: number;
-	fullName?: string;
-};
+// Подключение внутренних компонентов
+import AuthForm from "./forms/auth-form/auth-form";
 
-export type TAuthRequestResult = {
-	success: boolean;
-	meta: {
-		accountLevel: number;
-		fullName: string;
-	};
-};
+// Подключение стилей
+import "./shared.less";
+import ControlForm from "./forms/control-form/control-form";
 
 interface IProps {}
 interface IState {
-	accountAuthData: TAccountAuthData;
+	/**
+     * Данные о текущем аккаунте
+     */
+	accountData?: TAccountData;
+
+	/**
+     * Данные о состоянии контента страницы
+     */
+	contentLoaded?: boolean;
 }
 
-export const AccountDataContext = React.createContext<TAccountAuthData>({
-	authState: false
-});
-
-export default class CMS extends React.PureComponent<IProps, IState> {
-	public readonly state: IState = { accountAuthData: { authState: false } };
-	public constructor (props: IProps) {
+export const AccountDataContext = React.createContext<TAccountData | null>(null);
+export default class CMSRoot extends React.PureComponent<IProps, IState> {
+	state: IState = {};
+	constructor (props: IProps) {
 		super(props);
-		this.updateAuthState = this.updateAuthState.bind(this);
 	}
 
-	private updateAuthState ({ authState, accountLevel, fullName }: TAccountAuthData) {
-		if (authState === false) localStorage.removeItem("cmsAccountData");
-		this.setState({ accountAuthData: { authState, accountLevel, fullName } });
-	}
+	/**
+     * Функция обновления состояния данных об аккаунте,
+     * передается в компонент формы входа
+     *
+     * @param login логин для авторизации
+     * @param password пароль
+     * @returns true если удалось войти в аккаунт
+     */
+	private readonly updateAccountData = async (login: string, password: string) => {
+		const accountData = await this.requestAccountData(login, CryptoJS.MD5(password).toString());
+		if (!accountData.success) return false;
 
-	private readonly authDataVerification = async ({ login, hash }: { login: string; hash: string }) => {
-		const resultContent = await fetch(
-			configuration.api.server_path + configuration.api.authorization + login + "&hash=" + hash
-		).then(req => req.json());
+		localStorage.setItem(config.localSessionKey, `${login};${password}`);
+		this.setState({ accountData: accountData.meta as TAccountData });
 
-		return resultContent as TAuthRequestResult;
+		return true;
 	};
 
-	public componentDidMount () {
-		const storageKey = localStorage.getItem("cmsAccountData");
-		if (!storageKey) return;
+	/**
+     * Функция отправляет запрос авторизации серверу и возвращает данные
+     * об аккаунте, если логи и хэш пароля верны.
+     *
+     * @param login логин текущего пользователя
+     * @param hash пароль
+     * @returns данные об аккаунте в виде TAccountData
+     */
+	private readonly requestAccountData = (login: string, hash: string) => {
+		return fetch(app_config.api.server_path + app_config.api.authorization + `${login}&hash=${hash}`).then(
+			req => req.json() as Promise<Request.TRequestResult<TAccountData>>
+		);
+	};
 
-		const [ login, password ] = storageKey.split(";");
-		this.authDataVerification({ login, hash: CryptoJS.MD5(password).toString() }).then(result => {
-			if (!result.success) return localStorage.removeItem("cmsAccountData");
-			this.updateAuthState({ authState: true, ...result.meta });
-		});
+	componentDidMount () {
+		/**
+         * Чисто техническая функция для более красивой организации
+         * анонимной функции определения SessionData
+         * @param callback по названию переменной понятно 😐
+         * @returns как ни странно, но null 😑
+         */
+		const setNull = (callback?: () => any) => {
+			if (callback) callback();
+			return null;
+		};
+
+		/**
+         * Функция проверяет, существует ли локальная запись о каком-либо аккаунте и, если
+         * такая запись существует, преобразует ее в логин и хэш
+         *
+         * @returns null или массив с паролем и логином
+         */
+		const sessionData = (() => {
+			const sessionKey = localStorage.getItem(config.localSessionKey);
+			if (!sessionKey) return null;
+
+			const sessionData = sessionKey.split(";");
+			if (sessionData.length != 2) return setNull(() => localStorage.removeItem(config.localSessionKey));
+
+			return sessionData;
+		})();
+
+		// Проверка на существование данных сессии и вход по ним
+		if (!sessionData) this.setState({ contentLoaded: true });
+		else {
+			const [ login, hash ] = [ sessionData[0], CryptoJS.MD5(sessionData[1]).toString() ];
+
+			// Запрос данных о аккаунте с сервера
+			this.requestAccountData(login, hash).then(data => {
+				if (data.success) this.setState({ accountData: data.meta as TAccountData });
+
+				// При любом результате помечаем страницу загруженной
+				this.setState({ contentLoaded: true });
+			});
+		}
 	}
 
-	public render () {
+	render () {
+		// Установка текущего управляющего компонента (форма входа или панель управления)
+		let currentControlComponent = <AuthForm updateData={this.updateAccountData} />;
+		if (this.state.accountData) currentControlComponent = <ControlForm updateData={this.updateAccountData} />;
+
 		return (
-			<div id="cms-root" className="content-block nowrap w-100 h-100">
-				<AccountDataContext.Provider value={this.state.accountAuthData}>
-					{this.state.accountAuthData.authState ? (
-						<MainForm updateAuthState={this.updateAuthState} />
-					) : (
-						<AuthForm updateAuthState={this.updateAuthState} verification={this.authDataVerification} />
-					)}
-				</AccountDataContext.Provider>
+			<div id="cms-root">
+				{this.state.contentLoaded ? (
+					<div id="cms-content-wrapper">
+						<AccountDataContext.Provider value={this.state.accountData || null}>
+							{currentControlComponent}
+						</AccountDataContext.Provider>
+					</div>
+				) : (
+					<div id="cms-loading-handler">Loading</div>
+				)}
 			</div>
 		);
 	}
