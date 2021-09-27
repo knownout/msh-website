@@ -11,7 +11,7 @@ import "./components/navigation/navigation.less";
 import TitlePage from "./pages/title-page/title-page";
 import DefaultPage from "./pages/default-page/default-page";
 import Footer from "./components/footer/footer";
-import CMSRoot from "./cms/cms";
+import CMSRoot from "./cms";
 
 interface AppState {
 	headerHeight: number;

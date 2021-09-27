@@ -9,6 +9,7 @@ import { configuration as app_config } from "../utils";
 import CryptoJS from "crypto-js";
 
 // Подключение внутренних компонентов
+import MessageBox, { MessageBoxWorker, TMessageBoxData } from "./components/message-box";
 import AuthForm from "./forms/auth-form/auth-form";
 
 // Подключение стилей
@@ -26,11 +27,16 @@ interface IState {
      * Данные о состоянии контента страницы
      */
 	contentLoaded?: boolean;
+
+	/**
+	 * Контейнер всплывающего окна
+	 */
+	messageBox: TMessageBoxData;
 }
 
 export const AccountDataContext = React.createContext<TAccountData | null>(null);
 export default class CMSRoot extends React.PureComponent<IProps, IState> {
-	state: IState = {};
+	state: IState = { messageBox: { state: false } };
 	constructor (props: IProps) {
 		super(props);
 	}
@@ -45,7 +51,7 @@ export default class CMSRoot extends React.PureComponent<IProps, IState> {
      */
 	private readonly updateAccountData = async (login: string, password: string) => {
 		const accountData = await this.requestAccountData(login, CryptoJS.MD5(password).toString());
-		if (!accountData.success) return false;
+		if (!accountData || !accountData.success) return false;
 
 		localStorage.setItem(config.localSessionKey, `${login};${password}`);
 		this.setState({ accountData: accountData.meta as TAccountData });
@@ -62,9 +68,18 @@ export default class CMSRoot extends React.PureComponent<IProps, IState> {
      * @returns данные об аккаунте в виде TAccountData
      */
 	private readonly requestAccountData = (login: string, hash: string) => {
-		return fetch(app_config.api.server_path + app_config.api.authorization + `${login}&hash=${hash}`).then(
-			req => req.json() as Promise<Request.TRequestResult<TAccountData>>
-		);
+		return fetch(app_config.api.server_path + app_config.api.authorization + `${login}&hash=${hash}`)
+			.then(req => req.json() as Promise<Request.TRequestResult<TAccountData>>)
+			.catch(() => {
+				this.messageBoxWorker
+					.updateContent({
+						title: "Ошибка подключения",
+						message:
+							"Ошибка при получении данных аккаунта: не удалось соединиться с сервером, " +
+							"попробуйте зайти позже или сообщите администратору"
+					})
+					.updateState(true);
+			});
 	};
 
 	componentDidMount () {
@@ -102,6 +117,7 @@ export default class CMSRoot extends React.PureComponent<IProps, IState> {
 
 			// Запрос данных о аккаунте с сервера
 			this.requestAccountData(login, hash).then(data => {
+				if (!data) return this.setState({ contentLoaded: true });
 				if (data.success) this.setState({ accountData: data.meta as TAccountData });
 
 				// При любом результате помечаем страницу загруженной
@@ -110,6 +126,10 @@ export default class CMSRoot extends React.PureComponent<IProps, IState> {
 		}
 	}
 
+	// Обслуживающие функции для всплывающего окна
+	private readonly updateMessageBox = (box: TMessageBoxData) => this.setState({ messageBox: { ...box } });
+	private readonly messageBoxWorker = new MessageBoxWorker(this.updateMessageBox, this.state.messageBox);
+
 	render () {
 		// Установка текущего управляющего компонента (форма входа или панель управления)
 		let currentControlComponent = <AuthForm updateData={this.updateAccountData} />;
@@ -117,6 +137,7 @@ export default class CMSRoot extends React.PureComponent<IProps, IState> {
 
 		return (
 			<div id="cms-root">
+				<MessageBox messageBox={this.state.messageBox} worker={this.messageBoxWorker} />
 				{this.state.contentLoaded ? (
 					<div id="cms-content-wrapper">
 						<AccountDataContext.Provider value={this.state.accountData || null}>

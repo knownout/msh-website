@@ -1,3 +1,5 @@
+import CMSRoot from "./cms";
+
 /**
  * Объект конфигурации CMS
  */
@@ -46,3 +48,5 @@ export namespace Request {
 		meta: T | TRequestErrorMeta;
 	};
 }
+
+export default CMSRoot;

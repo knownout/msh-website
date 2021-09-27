@@ -1,0 +1,110 @@
+div#message-box-layout {
+	position: fixed;
+
+	z-index: 100;
+
+	width: 100%;
+	height: 100%;
+
+	padding: 10px;
+	background: rgba(#111, .8);
+
+	top: 0;
+	left: 0;
+	overflow: hidden;
+
+	/**
+	 * Эффект размытия фона; отключен в связи с нестабильной работой сайта (пролагиванием)
+	 */
+	// backdrop-filter: blur(3px);
+
+	opacity: 1;
+	transition: 100ms ease all;
+
+	// Блок для всего контента сообщения (по центру layouter'a)
+	div.msg-holder {
+		width: 320px;
+		max-width: 100%;
+
+		// Стили для блоков с текстом (заголовок и текст сообщения)
+		span.msg-title,
+		span.msg-message {
+			position: relative;
+			display: block;
+
+			width: fit-content;
+			white-space: normal;
+
+			/*
+			 * Разбиение происходит БЕЗ разделения слов;
+			 * break-all будет просто ломать слова в наиболее
+			 * удобных (для программы) местах
+			 */
+			word-wrap: break-word;
+			word-break: normal;
+
+			width: 100%;
+			height: fit-content;
+
+			font-weight: 500;
+			opacity: .9;
+			// text-align: justify;
+		}
+
+		span.msg-title {
+			color: #fff;
+			opacity: 1;
+
+			text-align: left;
+			font-weight: 700;
+		}
+
+		// Блок для всего контента сообщения, кроме заголовка
+		div.msg-content {
+			width: inherit;
+			height: fit-content;
+
+			white-space: normal;
+			align-items: flex-end;
+
+			gap: 20px;
+		}
+
+		// Блок-держатель для кнопок сообщения
+		div.msg-buttons-holder {
+			box-shadow: unset;
+			padding: 0;
+
+			justify-content: center;
+			width: 100%;
+
+			background: transparent;
+			gap: 5px;
+
+			/**
+						 * Дополнительные стили кнопок
+						 */
+			div.button {
+				&.warn {
+					background: rgba(rgb(230, 168, 54), .7);
+					&:hover {
+						background: rgba(rgb(209, 153, 48), .7);
+					}
+				}
+
+				&.critical {
+					background: rgba(rgb(214, 27, 27), .5);
+					&:hover {
+						background: rgba(rgb(214, 27, 27), .6);
+					}
+				}
+			}
+		}
+	}
+
+	// Включение и отключение окна
+	&[data-state="false"] {
+		opacity: 0;
+		pointer-events: none;
+	}
+}

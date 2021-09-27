@@ -1,6 +1,7 @@
 // Основные модули
 import React from "react";
 import { IFormProps } from "../..";
+import MessageBox, { TMessageBoxData, MessageBoxWorker } from "../../components/message-box";
 
 // Подключение стилей
 import "./auth-form.less";
@@ -27,6 +28,9 @@ export default function AuthForm (props: IProps & IFormProps) {
 		buttonRef.current.classList.remove("disabled");
 		buttonRef.current.classList.add("fail");
 
+		if (loginInputRef.current) loginInputRef.current.classList.remove("disabled");
+		if (passInputRef.current) passInputRef.current.classList.remove("disabled");
+
 		// Изменение фокуса и удаление пароля
 		if (passInputRef.current) passInputRef.current.value = "";
 		if (loginInputRef.current) loginInputRef.current.focus();
@@ -52,6 +56,8 @@ export default function AuthForm (props: IProps & IFormProps) {
 
 		// Отключаем кнопку и отправляем запрос в корневой компонент
 		if (buttonRef.current) buttonRef.current.classList.add("disabled");
+		if (loginInputRef.current) loginInputRef.current.classList.add("disabled");
+		if (passInputRef.current) passInputRef.current.classList.add("disabled");
 
 		// Если пришла ошибка, встряхиваем кнопку и по новой
 		props.updateData(login, password).then(result => (result ? null : shakeButton()));

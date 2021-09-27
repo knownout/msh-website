@@ -84,7 +84,7 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
 		window.removeEventListener("resize", this.windowResizeHandler);
 	}
 
-	// TODO: If mobile menu bugs appear, there may be an error here. (ref: header || .header-content)
+	// BUG: Возможно, в элементах header или .header-content присутствует баг (ref: header || .header-content)
 	public render () {
 		return (
 			<header
