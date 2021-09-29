@@ -9,7 +9,7 @@ import { configuration as app_config } from "../utils";
 import CryptoJS from "crypto-js";
 
 // Подключение внутренних компонентов
-import MessageBox, { MessageBoxWorker, TMessageBoxData } from "./components/message-box";
+import MessageBox, { IMessageBoxParent, MessageBoxWorker, TMessageBoxData } from "./components/message-box";
 import AuthForm from "./forms/auth-form/auth-form";
 
 // Подключение стилей
@@ -17,7 +17,7 @@ import "./shared.less";
 import ControlForm from "./forms/control-form/control-form";
 
 interface IProps {}
-interface IState {
+interface IState extends IMessageBoxParent {
 	/**
      * Данные о текущем аккаунте
      */
@@ -27,11 +27,6 @@ interface IState {
      * Данные о состоянии контента страницы
      */
 	contentLoaded?: boolean;
-
-	/**
-	 * Контейнер всплывающего окна
-	 */
-	messageBox: TMessageBoxData;
 }
 
 export const AccountDataContext = React.createContext<TAccountData | null>(null);
@@ -76,14 +71,14 @@ export default class CMSRoot extends React.PureComponent<IProps, IState> {
 		return fetch(app_config.api.server_path + app_config.api.authorization + `${login}&hash=${hash}`)
 			.then(req => req.json() as Promise<Request.TRequestResult<TAccountData>>)
 			.catch(() => {
-				this.messageBoxWorker
-					.updateContent({
-						title: "Ошибка подключения",
-						message:
-							"Ошибка при получении данных аккаунта: не удалось соединиться с сервером, " +
-							"попробуйте зайти позже или сообщите администратору"
-					})
-					.updateState(true);
+				// this.messageBoxWorker
+				// 	.updateContent({
+				// 		title: "Ошибка подключения",
+				// 		message:
+				// 			"Ошибка при получении данных аккаунта: не удалось соединиться с сервером, " +
+				// 			"попробуйте зайти позже или сообщите администратору"
+				// 	})
+				// 	.updateState(true);
 			});
 	};
 
@@ -142,7 +137,7 @@ export default class CMSRoot extends React.PureComponent<IProps, IState> {
 
 		return (
 			<div id="cms-root">
-				<MessageBox messageBox={this.state.messageBox} worker={this.messageBoxWorker} />
+				<MessageBox state={this.state.messageBox} worker={this.messageBoxWorker} />
 				{this.state.contentLoaded ? (
 					<div id="cms-content-wrapper">
 						<AccountDataContext.Provider value={this.state.accountData || null}>

@@ -51,4 +51,20 @@ export namespace Request {
 	};
 }
 
+/**
+ * Функция для конвертации полного имени
+ * пользователя в фамилию и инициалы
+ * @param name полное имя
+ * @returns фамилия и инициалы
+ */
+export function fullNameShort (name: string) {
+	const wordsArray = name.split(" ").slice(0, 3),
+		familyName = wordsArray[0];
+
+	const getInitial = (item: string) => item.slice(0, 1).toLocaleUpperCase();
+	const initials = `${getInitial(wordsArray[1])}.${getInitial(wordsArray[2])}.`;
+
+	return `${familyName} ${initials}`;
+}
+
 export default CMSRoot;

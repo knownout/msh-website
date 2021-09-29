@@ -32,24 +32,31 @@ type TMessageBoxButton = {
   * @param title заголовок всплывающего окна
   * @param message сообщение, отображаемое внутри окна
   * @param buttons набор кнопок окна
+  * @param require определяет, будет ли всплывающее окно обязательным для ответа
   *
   */
-export type TMessageBoxData = Partial<{
+export type TMessageBoxData = {
 	/** Состояние всплывающего окна (открыто или закрыто) */
 	state: boolean;
 
 	/** Заголовок всплывающего окна */
-	title: string;
+	title?: string;
 
 	/** Сообщение, отображаемое внутри окна */
-	message: string | (JSX.Element | string)[];
+	message?: string | (JSX.Element | string)[];
 
 	/** Набор кнопок окна */
-	buttons: TMessageBoxButton[];
+	buttons?: TMessageBoxButton[];
 
 	/** Если задано, окно нельзя закрыть по клику в пустую область */
-	require: boolean;
-}>;
+	require?: boolean;
+};
+
+/** Тип состояния родительского компонента для всплывающего окна */
+export interface IMessageBoxParent {
+	/** Контейнер данных всплывающего окна */
+	messageBox: TMessageBoxData;
+}
 
 export { MessageBoxWorker };
 export default MessageBox;

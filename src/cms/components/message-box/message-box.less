@@ -13,6 +13,48 @@ div#message-box-layout {
 	left: 0;
 	overflow: hidden;
 
+	div#message-box-cursor-hint {
+		position: absolute;
+		display: block;
+
+		// max-width: 100%;
+		max-width: 220px;
+		width: fit-content;
+
+		background: rgba(#000, .5);
+		border-radius: 4px;
+
+		color: rgba(#fff, .6);
+		pointer-events: none;
+
+		top: 0;
+		left: 0;
+
+		overflow: hidden;
+		white-space: normal;
+
+		padding: 5px;
+		font-size: 12px;
+
+		z-index: 100;
+
+		text-align: justify;
+		transform: translateY(-50%) translateX(-100%);
+
+		&[data-state="false"] {
+			transition: 100ms ease all;
+		}
+		opacity: 0;
+
+		// &[reverse-direction="true"] {
+		// 	transform: translateY(-50%) translateX(10px);
+		// }
+
+		&[data-state="true"] {
+			opacity: 1;
+		}
+	}
+
 	/**
 	 * Эффект размытия фона; отключен в связи с нестабильной работой сайта (пролагиванием)
 	 */
@@ -25,6 +67,8 @@ div#message-box-layout {
 	div.msg-holder {
 		width: 320px;
 		max-width: 100%;
+
+		cursor: initial;
 
 		// Стили для блоков с текстом (заголовок и текст сообщения)
 		span.msg-title,
@@ -64,6 +108,8 @@ div#message-box-layout {
 
 			text-align: left;
 			font-weight: 700;
+
+			padding: 0 10px;
 		}
 
 		// Блок для всего контента сообщения, кроме заголовка
@@ -80,15 +126,17 @@ div#message-box-layout {
 		// Блок-держатель для кнопок сообщения
 		div.msg-buttons-holder {
 			box-shadow: unset;
-			padding: 0;
 
 			align-items: flex-end;
 			flex-direction: column;
 
-			width: 100%;
+			width: fit-content;
+			margin-left: auto;
 
 			background: transparent;
 			gap: 5px;
+
+			padding: 0 10px;
 
 			/**
 			 * Дополнительные стили кнопок
