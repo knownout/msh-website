@@ -42,7 +42,7 @@ export type TMessageBoxData = Partial<{
 	title: string;
 
 	/** Сообщение, отображаемое внутри окна */
-	message: string;
+	message: string | (JSX.Element | string)[];
 
 	/** Набор кнопок окна */
 	buttons: TMessageBoxButton[];

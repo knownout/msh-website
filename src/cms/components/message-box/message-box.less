@@ -49,6 +49,13 @@ div#message-box-layout {
 			font-weight: 500;
 			opacity: .9;
 			// text-align: justify;
+
+			p {
+				margin: 0;
+				&:not(:first-child) {
+					margin-top: 10px;
+				}
+			}
 		}
 
 		span.msg-title {
@@ -75,20 +82,31 @@ div#message-box-layout {
 			box-shadow: unset;
 			padding: 0;
 
-			justify-content: center;
+			align-items: flex-end;
+			flex-direction: column;
+
 			width: 100%;
 
 			background: transparent;
 			gap: 5px;
 
 			/**
-						 * Дополнительные стили кнопок
-						 */
+			 * Дополнительные стили кнопок
+			 */
 			div.button {
+				border-radius: 4px 0 0 4px;
+				&:first-child {
+					border-radius: 4px 4px 0 4px;
+				}
+
+				&:last-child {
+					border-radius: 4px 0 4px 4px;
+				}
+
 				&.warn {
-					background: rgba(rgb(230, 168, 54), .7);
+					background: rgba(rgb(255, 197, 88), .7);
 					&:hover {
-						background: rgba(rgb(209, 153, 48), .7);
+						background: rgba(rgb(245, 183, 68), .7);
 					}
 				}
 

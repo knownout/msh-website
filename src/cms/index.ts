@@ -4,7 +4,8 @@ import CMSRoot from "./cms";
  * Объект конфигурации CMS
  */
 export const CMSInternalConfiguration = {
-	localSessionKey: "cmsAccountData"
+	localSessionKey: "cmsAccountData",
+	adminPanelExitConfirmKey: "adminPanelExitConfirm"
 };
 
 /**
@@ -17,6 +18,7 @@ export type TAccountData = {
 	fullName: string;
 	accountLevel: number;
 	token: string;
+	login: string;
 };
 
 /**

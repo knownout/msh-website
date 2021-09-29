@@ -1,0 +1,105 @@
+div.dropdown {
+	width: fit-content;
+	height: 40px;
+	font-weight: 500;
+
+	white-space: nowrap;
+	text-overflow: ellipsis;
+
+	span.dropdown-title {
+		position: relative;
+		display: flex;
+
+		flex-wrap: nowrap;
+
+		white-space: nowrap;
+		text-overflow: ellipsis;
+
+		span {
+			position: relative;
+			display: block;
+
+			width: 100%;
+
+			white-space: nowrap;
+			text-overflow: ellipsis;
+
+			overflow: hidden;
+			font-size: 15px;
+		}
+
+		height: 100%;
+		width: fit-content;
+		max-width: 220px;
+		opacity: 0.9;
+
+		padding: 10px;
+	}
+
+	border-radius: 4px;
+
+	transition: 100ms ease all;
+
+	background: rgba(#000, .1);
+	border: 1px solid rgba(#000, .01);
+
+	cursor: pointer;
+
+	&:hover {
+		background: rgba(#000, .15);
+	}
+
+	div.children-holder {
+		cursor: default;
+		position: absolute;
+		display: flex;
+
+		flex-direction: column;
+		flex-wrap: nowrap;
+
+		bottom: -5px;
+		border: 1px solid rgba(#000, .1);
+
+		transform: translateY(100%);
+		left: 0;
+
+		width: fit-content;
+		// min-width: fit-content;
+		max-width: 260px;
+
+		white-space: nowrap;
+		padding: 4px 0;
+		transition: inherit;
+
+		max-height: 220px;
+		overflow: hidden;
+		overflow-y: scroll;
+
+		div.empty {
+			padding: 7px;
+			font-size: 14px;
+			opacity: .7;
+		}
+
+		z-index: 100;
+		&[state-open="false"] {
+			bottom: 0;
+			opacity: 0;
+
+			pointer-events: none;
+			z-index: initial;
+		}
+
+		div.dropdown-item {
+			padding: 7px;
+			font-size: 15px;
+
+			cursor: pointer;
+			transition: 100ms ease all;
+
+			&:hover {
+				background: rgba(#000, .1);
+			}
+		}
+	}
+}

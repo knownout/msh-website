@@ -30,6 +30,10 @@ export class MessageBoxWorker {
 	constructor (updateStateFunction: (messageBox: TMessageBoxData) => void, messageBox: TMessageBoxData) {
 		this.updateStateFunction = updateStateFunction;
 		this.messageBox = messageBox;
+
+		this.updateContent = this.updateContent.bind(this);
+		this.updateState = this.updateState.bind(this);
+		this.require = this.require.bind(this);
 	}
 
 	/**
@@ -45,6 +49,7 @@ export class MessageBoxWorker {
 
 	public require (require: boolean) {
 		this.updateStateFunction(Object.assign(this.messageBox, { require: require }));
+		return this;
 	}
 
 	/**
@@ -130,12 +135,14 @@ export function MessageBox (props: IProps) {
 		);
 	});
 
+	const messageData = Array.isArray(message) ? message.map(e => <p key={Math.random()}>{e}</p>) : message;
+
 	return (
 		<div {...layoutAttributesList} data-state={props.messageBox.state}>
 			<div className="msg-holder content-block column nowrap no-centering gap-10">
 				{title && <span className="msg-title">{title}</span>}
 				<div className="msg-content styled-block content-block column no-centering nowrap">
-					{message && <span className="msg-message">{message}</span>}
+					{message && <span className="msg-message">{messageData}</span>}
 				</div>
 				<div className="msg-buttons-holder styled-block content-block row no-centering">{buttonsList}</div>
 			</div>

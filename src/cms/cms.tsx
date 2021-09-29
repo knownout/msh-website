@@ -59,6 +59,11 @@ export default class CMSRoot extends React.PureComponent<IProps, IState> {
 		return true;
 	};
 
+	private readonly eraseAccountData = () => {
+		localStorage.removeItem(config.localSessionKey);
+		this.setState({ accountData: undefined });
+	};
+
 	/**
      * Функция отправляет запрос авторизации серверу и возвращает данные
      * об аккаунте, если логи и хэш пароля верны.
@@ -133,7 +138,7 @@ export default class CMSRoot extends React.PureComponent<IProps, IState> {
 	render () {
 		// Установка текущего управляющего компонента (форма входа или панель управления)
 		let currentControlComponent = <AuthForm updateData={this.updateAccountData} />;
-		if (this.state.accountData) currentControlComponent = <ControlForm updateData={this.updateAccountData} />;
+		if (this.state.accountData) currentControlComponent = <ControlForm eraseData={this.eraseAccountData} />;
 
 		return (
 			<div id="cms-root">

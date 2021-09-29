@@ -13,6 +13,15 @@ export function getTextTime (timestamp: number) {
 	return `${date.getDay()} ${monthName} ${date.getFullYear()}`;
 }
 
+export function getHelloText () {
+	const hours = new Date().getHours();
+	if (hours >= 17 && hours <= 23) return "Добрый вечер";
+	else if (hours >= 24 || hours <= 4) return "Доброй ночи";
+	else if (hours >= 13 && hours <= 16) return "Добрый день";
+	else if (hours <= 12 && hours >= 5) return "Доброе утро";
+	return "Добро пожаловать";
+}
+
 export const configuration = {
 	minHeight: 520,
 	minWidth: 320,
@@ -64,6 +73,7 @@ export const configuration = {
 		get_articles: "api/articles.php?action=get&path=",
 		server_path: "http://192.168.100.170/",
 		fetch_title_page: "api/fetch-title-page-data.php",
-		authorization: "api/auth.php?login="
+		authorization: "api/auth.php?login=",
+		temp_upload: "api/temp_upload.php"
 	}
 };

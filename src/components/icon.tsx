@@ -15,9 +15,13 @@ export default function Icon (props: { icon: string; className?: string | null; 
 				.trim()}
 		>
 			<div className="icon-holder content-block row nowrap">
-				<img src={configuration.api.server_path + "public/social-icons/" + props.icon + ".svg"} alt="" />
+				<img src={getIconPath(props.icon)} alt="" />
 			</div>
 			{props.children && <span className="text content-block row nowrap">{props.children}</span>}
 		</div>
 	);
+}
+
+export function getIconPath (name: string) {
+	return configuration.api.server_path + "public/social-icons/" + name + ".svg";
 }
