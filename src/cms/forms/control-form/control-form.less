@@ -8,6 +8,7 @@ div.form#control-form {
 	min-width: 800px;
 	max-width: 1280px;
 
+	// Заголовок окна (тот, что с кнопками)
 	div.content-header {
 		width: calc(100% - 20px);
 		margin: 10px;
@@ -19,6 +20,7 @@ div.form#control-form {
 
 		z-index: 10;
 
+		// Секции (левая и правая)
 		div.section {
 			height: 50px;
 
@@ -28,7 +30,8 @@ div.form#control-form {
 		}
 	}
 
-	div.content-container {
+	// Содержание окна для редактора (редактор и параметры материала)
+	div.content-container#content-editor {
 		width: calc(100% - 40px);
 		height: 100%;
 
@@ -38,34 +41,59 @@ div.form#control-form {
 		margin-top: -10px;
 		margin-bottom: 0;
 
+		// Параметры для компонента выпадающего списка
 		div.dropdown {
 			width: 100%;
 		}
 
+		// Обёртка, которая идет внутри компонента ScrollArea
 		div.section-wrapper {
-			// background: red;
 			width: 100%;
 			height: fit-content;
 			padding: 10px;
 			gap: 10px;
 
-			// padding-top: 30px;
-
 			justify-content: center;
 
+			// Секция (лево-право, редактор и настройки)
 			div.section {
 				width: 100%;
 				height: fit-content;
 
+				span.title {
+					position: relative;
+					display: block;
+
+					font-weight: 700;
+					width: 100%;
+
+					// text-align: center;
+					opacity: 0.7;
+
+					text-transform: uppercase;
+
+					font-size: 14px;
+				}
+
+				// Настройки
 				&.aside-menu {
 					max-width: 320px;
 					width: 320px;
 
 					overflow: initial;
 
-					// background: #000;
+					span.text-title {
+						font-weight: 700;
+						opacity: 0.5;
+						font-size: 14px;
+						margin: 5px;
+
+						text-transform: initial;
+						margin-top: 20px;
+					}
 				}
 
+				// Редактор
 				&.editor-container {
 					min-height: 720px;
 					max-width: 720px;
@@ -73,6 +101,7 @@ div.form#control-form {
 			}
 		}
 
+		// Параметры компонента ScrollArea
 		div.content-scroll-area {
 			width: 100%;
 		}

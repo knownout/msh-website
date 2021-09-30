@@ -13,6 +13,8 @@ import ScrollArea from "react-scrollbar";
 // Подключение стилей
 import "./control-form.less";
 import Dropdown from "../../components/dropdown";
+import DateTimePicker from "../../components/datetime-picker";
+import { DropdownContext } from "../../components/dropdown/dropdown";
 
 interface IProps {
 	eraseData: () => void;
@@ -33,6 +35,7 @@ export default class ControlForm extends React.PureComponent<IProps, IState> {
 	}
 
 	// Технические объекты для поддержки работоспособности всплывающего окна
+
 	/**
 	 * Процедура обновления состояния контейнера данных всплывающего окна в родительском компоненте
 	 * @param box контейнер данных всплывающего окна
@@ -101,7 +104,7 @@ export default class ControlForm extends React.PureComponent<IProps, IState> {
 					{/* Левая менюшка с выбором страницы */}
 					<div className="section content-block row">
 						<SelectMenu selection={0}>
-							<SelectMenu.Item icon="plus">Редактор новости</SelectMenu.Item>
+							<SelectMenu.Item icon="plus">Редактор материала</SelectMenu.Item>
 							<SelectMenu.Item icon="list">Список новостей</SelectMenu.Item>
 						</SelectMenu>
 					</div>
@@ -123,17 +126,27 @@ export default class ControlForm extends React.PureComponent<IProps, IState> {
 				</div>
 
 				{/* Содержание формы */}
-				<div className="content-container content-block column no-centering">
+				<div className="content-container content-block column no-centering" id="content-editor">
 					<ScrollArea horizontal={false} smoothScrolling={true} className="content-scroll-area">
 						<div className="section-wrapper content-block row no-centering nowrap">
 							<div className="section editor-container content-block column styled-block no-centering">
 								editor
 							</div>
 							<div className="section aside-menu content-block column styled-block no-centering">
+								<span className="title">Параметры материала</span>
+
+								<span className="title text-title">Тип материала</span>
 								<Dropdown select={0}>
 									<Dropdown.Item>Новость</Dropdown.Item>
 									<Dropdown.Item>Документ</Dropdown.Item>
 									<Dropdown.Item>Страница</Dropdown.Item>
+								</Dropdown>
+
+								<span className="title text-title">Тип материала</span>
+								<Dropdown rawContent={true}>
+									<DropdownContext.Consumer>
+										{dropdown => <DateTimePicker />}
+									</DropdownContext.Consumer>
 								</Dropdown>
 							</div>
 						</div>
