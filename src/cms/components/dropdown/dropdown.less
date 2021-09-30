@@ -106,6 +106,16 @@ div.dropdown {
 				background: lighten(@defaultLightColor, 10%);
 				color: @defaultDarkColor;
 			}
+
+			&[data-selected="true"] {
+				background: rgba(#fff, .1);
+				color: rgba(#fff, .75);
+
+				pointer-events: none;
+				opacity: 0.75;
+				// padding: 3px 10px;
+				padding-left: 15px;
+			}
 		}
 	}
 

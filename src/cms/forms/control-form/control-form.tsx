@@ -130,14 +130,10 @@ export default class ControlForm extends React.PureComponent<IProps, IState> {
 								editor
 							</div>
 							<div className="section aside-menu content-block column styled-block no-centering">
-								{/*
-								превью
-								Тип документ новость страница
-								дата и время публикации
-								опубликовать / запланировать
-							*/}
-								<Dropdown>
-									<span>123</span>
+								<Dropdown select={0}>
+									<Dropdown.Item>Новость</Dropdown.Item>
+									<Dropdown.Item>Документ</Dropdown.Item>
+									<Dropdown.Item>Страница</Dropdown.Item>
 								</Dropdown>
 							</div>
 						</div>

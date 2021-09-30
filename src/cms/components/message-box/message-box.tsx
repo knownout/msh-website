@@ -126,9 +126,14 @@ export class MessageBoxWorker {
 	}
 }
 
+/**
+ * Компонент, интегрируемый в JSX структуру приложения
+ */
 export function MessageBox (props: IProps) {
+	// Ссылка на элемент подсказки возле курсора
 	const hintReference = React.createRef<HTMLDivElement>();
 
+	// Состояние элемента подсказки и его положение
 	const [ hint, setHint ] = React.useState<TMessageBoxHintState>({
 		state: false,
 		x: 0,
@@ -194,6 +199,7 @@ export function MessageBox (props: IProps) {
 		);
 	});
 
+	/** Текст всплывающего окна */
 	const messageData = Array.isArray(message) ? message.map(e => <p key={Math.random()}>{e}</p>) : message;
 
 	/**
@@ -249,14 +255,21 @@ export function MessageBox (props: IProps) {
 
 	return (
 		<div {...layoutAttributesList} data-state={props.state.state} {...hintSupportAttributes.layout}>
+			{/* Подсказка возле курсора */}
 			<div id="message-box-cursor-hint" {...hintSupportAttributes.hint}>
 				{MessageBoxWorker.translation.hint}
 			</div>
+
+			{/* Содержимое всплывающего окна */}
 			<div className="msg-holder content-block column nowrap no-centering gap-10">
 				{title && <span className="msg-title">{title}</span>}
+
+				{/* Текст сообщения всплывающего окна */}
 				<div className="msg-content styled-block content-block column no-centering nowrap">
 					{message && <span className="msg-message">{messageData}</span>}
 				</div>
+
+				{/* Контейнер кнопок */}
 				<div className="msg-buttons-holder styled-block content-block row no-centering">{buttonsList}</div>
 			</div>
 		</div>
