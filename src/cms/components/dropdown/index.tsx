@@ -1,4 +1,4 @@
-import { Dropdown } from "./dropdown";
+import { Dropdown, DropdownContext } from "./dropdown";
 
 /** Пространство имен для компонента `Dropdown` */
 export namespace Dropdown {
@@ -108,4 +108,5 @@ export namespace Dropdown {
 	}
 }
 
+export { DropdownContext };
 export default Dropdown;
