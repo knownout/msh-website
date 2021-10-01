@@ -1,5 +1,5 @@
-export function getTextTime (timestamp: number) {
-	const date = new Date(timestamp);
+export function getTextTime (rawDate: Date | string | number) {
+	const date = new Date(rawDate);
 	let monthName = configuration.monthsName[date.getMonth()];
 
 	let lastCharacter = monthName.slice(-1);
@@ -10,16 +10,14 @@ export function getTextTime (timestamp: number) {
 
 	monthName = monthName + lastCharacter;
 
-	return `${date.getDay()} ${monthName} ${date.getFullYear()}`;
+	return `${date.getDate()} ${monthName} ${date.getFullYear()}`;
 }
 
-export function getHelloText () {
-	const hours = new Date().getHours();
-	if (hours >= 17 && hours <= 23) return "Добрый вечер";
-	else if (hours >= 24 || hours <= 4) return "Доброй ночи";
-	else if (hours >= 13 && hours <= 16) return "Добрый день";
-	else if (hours <= 12 && hours >= 5) return "Доброе утро";
-	return "Добро пожаловать";
+export function setLeadingZeros (number: number, length: number = 2) {
+	let content = String(number);
+
+	if (content.length < length) content = Array(length - content.length).fill("0").join("") + content;
+	return content;
 }
 
 export const configuration = {

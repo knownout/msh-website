@@ -143,9 +143,9 @@ export default class ControlForm extends React.PureComponent<IProps, IState> {
 								</Dropdown>
 
 								<span className="title text-title">Тип материала</span>
-								<Dropdown rawContent={true}>
+								<Dropdown rawContent={true} closeOnMouseLeave={false}>
 									<DropdownContext.Consumer>
-										{dropdown => <DateTimePicker />}
+										{dropdown => <DateTimePicker contextOptions={dropdown} />}
 									</DropdownContext.Consumer>
 								</Dropdown>
 							</div>

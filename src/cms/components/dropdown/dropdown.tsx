@@ -108,7 +108,8 @@ export class Dropdown extends React.PureComponent<NS.IProps, NS.IState> {
 			if (this.state.dropdownOpen) this.setState({ dropdownOpen: false });
 		};
 
-		if (!this.state.timeOut) this.setState({ timeOut: Dropdown.timeOut(1000, timeOutCallback) });
+		if (!this.state.timeOut)
+			this.setState({ timeOut: Dropdown.timeOut(this.props.openTimeOut || 1000, timeOutCallback) });
 	}
 
 	render () {
@@ -133,7 +134,8 @@ export class Dropdown extends React.PureComponent<NS.IProps, NS.IState> {
 
 		const eventHandlers = {
 			onMouseOut: () => {
-				if (this.state.timeOut && this.state.dropdownOpen) this.state.timeOut.set();
+				if (this.state.timeOut && this.state.dropdownOpen && this.props.closeOnMouseLeave !== false)
+					this.state.timeOut.set();
 			},
 
 			onMouseOver: () => {
