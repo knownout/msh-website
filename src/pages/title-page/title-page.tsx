@@ -22,6 +22,8 @@ interface ITitlePageState {
 	mainPageData: { [key: string]: any };
 	mainArticleData: { [key: string]: any };
 
+	mainInfoContent: { [key: string]: any };
+
 	articlesList: TArticle[];
 }
 
@@ -32,6 +34,8 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 
 		mainArticleData: {},
 		mainPageData: {},
+		mainInfoContent: {},
+
 		articlesList: []
 	};
 
@@ -72,9 +76,17 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 
 				this.setState({
 					mainArticleData: { date, title, preview },
-					loaded: true,
 					articlesList: fetchedArticlesList
 				});
+			}
+
+			const mainInfo = await fetch(
+				configuration.api.server_path + configuration.api.get_info_content + this.state.mainPageData.meta.info
+			).then(req => req.json());
+
+			if (mainInfo.success == false) this.setState({ exception: true });
+			else {
+				this.setState({ mainInfoContent: mainInfo.meta, loaded: true });
 			}
 		}
 	}
@@ -90,7 +102,8 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 
 		const bgImage = { backgroundImage: `url("${this.state.mainArticleData.preview}")` } as React.CSSProperties;
 		const articlesListPreviewText = this.state.articlesList.map(e => {
-			return e.meta.content.blocks.filter((i: any) => i.type == "paragraph")[0].data.text;
+			const block = e.meta.content.blocks.filter((i: any) => i.type == "paragraph")[0];
+			return { blocks: [ block ] } as DataProp;
 		});
 
 		return (
@@ -109,13 +122,7 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 								<div className="content-block column" id="main-document">
 									<span className="block-title">Важная информация</span>
 									<div className="block-content">
-										На период введения ограничительных мероприятий (карантина) по предотвращению
-										распространения коронавирусной инфекции COVID-19 в Министерстве сельского
-										хозяйства и природных ресурсов Приднестровской Молдавской Республики ограничен
-										прием граждан. На период введения ограничительных мероприятий (карантина) по
-										предотвращению распространения коронавирусной инфекции COVID-19 в Министерстве
-										сельского хозяйства и природных ресурсов Приднестровской Молдавской Республики
-										ограничен прием граждан.
+										<Blocks data={this.state.mainInfoContent.content} />
 									</div>
 								</div>
 							</div>
@@ -127,6 +134,9 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 										className="article content-block column"
 										key={Math.random()}
 										data-bg={!!e.meta.preview}
+										onClick={() => {
+											window.location.href = this.state.mainPageData.meta.articles[i];
+										}}
 									>
 										{e.meta.preview && (
 											<div
@@ -135,9 +145,7 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 											/>
 										)}
 
-										<div className="content">
-											{articlesListPreviewText[i] + " " + articlesListPreviewText[i]}
-										</div>
+										<div className="content">{<Blocks data={articlesListPreviewText[i]} />}</div>
 
 										<span className="date">{getTextTime(e.meta.content.time as number)}</span>
 										<span className="title">{e.meta.content.title}</span>

@@ -2,56 +2,64 @@
 import React from "react";
 
 // Подключение компонентов
-import DateTimePicker from "../../../components/datetime-picker";
-import Dropdown, { DropdownContext } from "../../../components/dropdown";
 import ScrollArea from "react-scrollbar";
 
 // Подключение стилей
 import "./editor-page.less";
+import { MessageBoxWorker } from "../../../components/message-box";
+import Options from "./sections/options";
+import MaterialEditor from "./sections/material-editor";
+import { ArticleType, Base64EncodedImage } from ".";
 
-namespace EditorPage {
-	export type TArticleType = 0 | 1 | 2;
+export namespace Editor {
+	export interface IProps {
+		messageBoxWorker: MessageBoxWorker;
+	}
+
+	export interface IState {
+		options: Partial<TOptionsData>;
+	}
+
+	export type TOptionsData = {
+		preview: Base64EncodedImage;
+		type: ArticleType;
+		publishDate: Date;
+	};
+
+	export interface EditorPreviewProps {
+		setPreview: (image: Base64EncodedImage) => void;
+		preview?: Base64EncodedImage;
+	}
 }
 
-export default function EditorPage (props: {}) {
-	const [ articleType, setArticleType ] = React.useState<EditorPage.TArticleType>(0);
-	const changeArticleType = (key: number) => setArticleType(key as EditorPage.TArticleType);
+export default class Editor extends React.PureComponent<Editor.IProps, Editor.IState> {
+	state: Editor.IState = { options: {} };
 
-	const notAvailable = <span className="not-available">Недоступно для данного типа публикации</span>;
+	constructor (props: Editor.IProps) {
+		super(props);
 
-	return (
-		<div className="content-container content-block column no-centering" id="content-editor">
-			<ScrollArea horizontal={false} smoothScrolling={true} className="content-scroll-area">
-				<div className="section-wrapper content-block row no-centering nowrap">
-					<div className="section editor-container content-block column styled-block no-centering">
-						editor
+		this.updateOptions = this.updateOptions.bind(this);
+	}
+
+	private updateOptions (options: Partial<Editor.TOptionsData>) {
+		let resultingObject = this.state.options;
+
+		Object.keys(options).map(key => Object.assign(resultingObject, { [key]: (options as any)[key] }));
+
+		this.setState({ options: resultingObject });
+		this.forceUpdate();
+	}
+
+	render () {
+		return (
+			<div className="content-container content-block column no-centering" id="content-editor">
+				<ScrollArea horizontal={false} smoothScrolling={true} className="content-scroll-area">
+					<div className="section-wrapper content-block row no-centering nowrap">
+						<MaterialEditor />
+						<Options options={this.state.options} updateOptions={this.updateOptions} />
 					</div>
-					<div className="section aside-menu content-block column styled-block no-centering">
-						<span className="title">Параметры материала</span>
-
-						<span className="title text-title">Тип материала</span>
-						<Dropdown select={0} openTimeOut={500} onChange={changeArticleType}>
-							<Dropdown.Item>Новость</Dropdown.Item>
-							<Dropdown.Item>Документ</Dropdown.Item>
-							<Dropdown.Item>Страница</Dropdown.Item>
-						</Dropdown>
-
-						<span className="title text-title">Дата публикации</span>
-						{articleType == 2 ? (
-							notAvailable
-						) : (
-							<Dropdown rawContent={true} openTimeOut={500}>
-								<DropdownContext.Consumer>
-									{dropdown => <DateTimePicker contextOptions={dropdown} />}
-								</DropdownContext.Consumer>
-							</Dropdown>
-						)}
-
-						<span className="title text-title">Превью</span>
-						{articleType != 0 ? notAvailable : <span>ImagePreviewComponent stub</span>}
-					</div>
-				</div>
-			</ScrollArea>
-		</div>
-	);
+				</ScrollArea>
+			</div>
+		);
+	}
 }

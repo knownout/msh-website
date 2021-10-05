@@ -75,7 +75,7 @@ export class Dropdown extends React.PureComponent<NS.IProps, NS.IState> {
 			};
 
 			return (
-				<div data-readonly={String(props.readonly || false)} {...attributesList}>
+				<div data-enabled={String(props.readonly || false)} {...attributesList}>
 					{props.children}
 				</div>
 			);

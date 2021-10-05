@@ -1,0 +1,50 @@
+div.preview-image {
+	white-space: normal;
+	font-size: 14px;
+
+	font-weight: 500;
+	padding: 10px;
+
+	transition: 100ms ease all;
+	border-radius: 4px;
+
+	cursor: pointer;
+
+	background: rgba(#000, .05);
+
+	&:hover {
+		background: rgba(#000, .1);
+	}
+
+	div.image-container {
+		@size: 10;
+
+		min-width: calc(16px * @size);
+		min-height: calc(9px * @size);
+
+		width: calc(16px * @size);
+		height: calc(9px * @size);
+
+		background-color: rgba(#000, .05);
+		border-radius: 4px;
+		overflow: hidden;
+
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
+
+		border: 1px dashed rgba(#000, .2);
+	}
+
+	span.preview-hint {
+		position: relative;
+		display: block;
+
+		width: 100%;
+
+		opacity: .9;
+		text-align: center;
+
+		text-align: center;
+	}
+}

@@ -8,7 +8,7 @@ import { AccountDataContext } from "../../cms";
 // Подключение компонентов
 import MessageBox, { TMessageBoxData, MessageBoxWorker, IMessageBoxParent } from "../../components/message-box";
 import SelectMenu from "../../components/select-menu";
-import EditorPage from "./editor-page/editor-page";
+import Editor from "./editor-page/editor-page";
 
 // Подключение стилей
 import "./control-form.less";
@@ -122,7 +122,7 @@ export default class ControlForm extends React.PureComponent<IProps, IState> {
 					</div>
 				</div>
 
-				<EditorPage />
+				<Editor messageBoxWorker={this.messageBoxWorker} />
 			</div>
 		);
 	}
