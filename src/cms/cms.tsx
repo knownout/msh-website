@@ -29,6 +29,10 @@ interface IState extends IMessageBoxParent {
 	contentLoaded?: boolean;
 }
 
+export type UUID = {
+	identifier: string;
+};
+
 export const AccountDataContext = React.createContext<TAccountData | null>(null);
 export default class CMSRoot extends React.PureComponent<IProps, IState> {
 	state: IState = { messageBox: { state: false } };

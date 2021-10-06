@@ -6,6 +6,6 @@ export enum ArticleType {
 
 export interface Base64EncodedImage {
 	mime?: string;
-	filename: string;
+	filename?: string;
 	content: string;
 }

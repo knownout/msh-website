@@ -63,7 +63,7 @@ export namespace Dropdown {
 		 * @param key индекс элемента в списке
 		 * @param name текст элемента
 		 */
-		onItemClick?: (key: number, name: string) => void;
+		onItemClick?(key: number, name: string): void;
 
 		/**
 		 * Обработчик события изменения значения выпадающего списка
@@ -74,7 +74,7 @@ export namespace Dropdown {
 		 * @param key индекс выбранного элемента в списке
 		 * @param value новое значение заголовка компонента
 		 */
-		onChange?: (key: number, value: string) => void;
+		onChange?(key: number, value: string): void;
 	}
 
 	export interface IState {
@@ -103,8 +103,8 @@ export namespace Dropdown {
 	export type TTimeOutFunction = (time: number, callback: () => void) => TTimeOutFunctionMethods;
 
 	export interface IDropdownContext {
-		setDropdownState: (dropdownOpen: boolean) => void;
-		updateTitle: (title: string) => void;
+		setDropdownState(dropdownOpen: boolean): void;
+		updateTitle(title: string): void;
 	}
 }
 

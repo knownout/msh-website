@@ -15,10 +15,24 @@ namespace NS {
 	 */
 	export interface IOptionsProps {
 		/** Набор параметров для изменения */
-		options: Partial<Editor.TOptionsData>;
+		options: Partial<Editor.IOptionsData>;
 
 		/** Метод изменения параметров */
-		updateOptions: (options: Partial<Editor.TOptionsData>) => void;
+		updateOptions(options: Partial<Editor.IOptionsData>): void;
+
+		/** Метод отправки данных материала в модуль публикации */
+		publish(options: Partial<Editor.IOptionsData>): void;
+	}
+
+	/**
+	 * Атрибуты компонента загрузки превью
+	 */
+	export interface EditorPreviewProps {
+		/** Метод изменения превью в родительском компоненте */
+		setPreview(image: Base64EncodedImage): void;
+
+		/** Данные загруженного изображения */
+		preview?: Base64EncodedImage;
 	}
 
 	/**
@@ -44,6 +58,10 @@ namespace NS {
  * @param props NS.IOptionsProps
  */
 export default function Options (props: NS.IOptionsProps) {
+	React.useEffect(() => {
+		if (typeof props.options.type != "number") props.updateOptions({ type: 0 });
+	});
+
 	// Функции изменения параметров (вынесены для очистки JSX кода)
 	const articleTypeChange = (key: number) => props.updateOptions({ type: key }),
 		dateChange = (date: Date) => props.updateOptions({ publishDate: date });
@@ -67,7 +85,9 @@ export default function Options (props: NS.IOptionsProps) {
 			<NS.Available condition={articleType == 0}>
 				<Dropdown rawContent={true} openTimeOut={500}>
 					<DropdownContext.Consumer>
-						{dropdown => <DateTimePicker contextOptions={dropdown} onChange={dateChange} />}
+						{dropdown => (
+							<DateTimePicker contextOptions={dropdown} onChange={dateChange} onReady={dateChange} />
+						)}
 					</DropdownContext.Consumer>
 				</Dropdown>
 			</NS.Available>
@@ -81,7 +101,9 @@ export default function Options (props: NS.IOptionsProps) {
 				/>
 			</NS.Available>
 
-			<div className="button">Опубликовать</div>
+			<div className="button" onClick={() => props.publish(props.options)}>
+				Опубликовать
+			</div>
 		</div>
 	);
 }
@@ -93,7 +115,7 @@ export default function Options (props: NS.IOptionsProps) {
  * основу берется переменная и метод из атрибутов компонента_
  * @param props Editor.EditorPreviewProps
  */
-function Preview (props: Editor.EditorPreviewProps) {
+function Preview (props: NS.EditorPreviewProps) {
 	/** Обработчик события клика на кнопку выбора превью */
 	const clickEventHandler = () => {
 		const dialog = document.createElement("input"),

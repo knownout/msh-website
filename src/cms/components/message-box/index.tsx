@@ -13,7 +13,7 @@ export type TMessageBoxButtonEvent = React.MouseEvent<HTMLDivElement, MouseEvent
   */
 type TMessageBoxButton = {
 	/** Событие при нажатии на кнопку (клавиатура и мышь) */
-	event?: () => void;
+	event?(): void;
 
 	/** Текст кнопки */
 	text: string;

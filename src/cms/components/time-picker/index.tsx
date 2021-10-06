@@ -17,7 +17,7 @@ export namespace TimePicker {
 		 * @param time объект типа TTimeIndex, содержащий информацию о часах и минутах
 		 * @param formattedTime строка времени вида HH:mm
 		 */
-		onChange?: (time: TTimeIndex, formattedTime: string) => void;
+		onChange?(time: TTimeIndex, formattedTime: string): void;
 
 		/**
 		 * Изначально выбранное время компонента.

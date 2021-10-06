@@ -24,8 +24,9 @@ type TTranslationModule = {
 };
 
 /**
- * Компонент для работы с всплывающим окном без лишних костылей в виде ручного изменения
- * состояния объект окна в родительском компоненте
+ * Класс взаимодействия с компонентом `MessageBox` _для работы с всплывающим окном без
+ * лишних костылей в виде ручного изменения состояния объект окна в
+ * родительском компоненте_
  *
  * @author knownOut <re-knownout> knownout@hotmail.com
  * @version 1.0.0
@@ -112,6 +113,14 @@ export class MessageBoxWorker {
 	}
 
 	/**
+	 * Метод для получения текущего состояния всплывающего окна
+	 * @returns текущее состояние окна
+	 */
+	public get messageBoxState () {
+		return this.messageBox.state;
+	}
+
+	/**
 	 * Метод редактирования i18n конфигурации компонента
 	 * @param props partial тип TTranslationModule (по аналогии с React state)
 	 * @returns TTranslationModule
@@ -127,7 +136,12 @@ export class MessageBoxWorker {
 }
 
 /**
- * Компонент, интегрируемый в JSX структуру приложения
+ * Компонент для работы с всплывающим окном без
+ * лишних костылей в виде ручного изменения состояния объект окна в
+ * родительском компоненте
+ *
+ * @author knownOut <re-knownout> knownout@hotmail.com
+ * @version 1.0.0
  */
 export function MessageBox (props: IProps) {
 	// Ссылка на элемент подсказки возле курсора

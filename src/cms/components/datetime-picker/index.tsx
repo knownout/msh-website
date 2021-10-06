@@ -15,7 +15,18 @@ export namespace DateTimePicker {
          *
          * @param date результат выбора типа Date
          */
-		onChange?: (date: Date) => void;
+		onChange?(date: Date): void;
+
+		/**
+		 * Обработчик события завершения инициализации
+		 * компонента
+		 *
+		 * Вызывается хуком componentDidMount после
+		 * инициализации компонента
+		 *
+		 * @param date стандартная (текущая) дата
+		 */
+		onReady?(date: Date): void;
 	}
 
 	export interface IState {

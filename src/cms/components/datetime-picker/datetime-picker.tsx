@@ -54,6 +54,11 @@ export class DateTimePicker extends React.PureComponent<NS.IProps, NS.IState> {
 		}
 	}
 
+	/** Хук загрузки компонента для вызова события onReady, если задано */
+	componentDidMount () {
+		if (this.props.onReady) this.props.onReady(this.state.dateTime);
+	}
+
 	render () {
 		// Атрибуты календаря
 		const dateAttributes = {

@@ -2,50 +2,17 @@ import React from "react";
 import { getIconPath } from "../../../components/icon";
 import "./select-menu.less";
 
-interface IProps {
-	children: JSX.Element[] | JSX.Element;
-
-	/** Процедура обновления состояния активного элемента в родительском элементе */
-	updateSelection?: (selection: number) => void;
-
-	/** Обработчик события клика на элемент */
-	onItemClick?: (key: number, name?: string) => void;
-
-	/** Переключатель доступности выбора активного элемента в текущем списке */
-	selectable?: boolean;
-
-	/** Индекс изначально активного элемента */
-	selection?: number;
-}
-
-interface IState {
-	/** Индекс (ключ) текущего активного элемента */
-	selection: number;
-}
-
-interface IItemProps {
-	/** Иконка перед текстом элемента */
-	icon?: string;
-
-	/** Текст элемента */
-	children: string;
-
-	/** Дополнительный класс элемента */
-	className?: string;
-
-	/** Переключатель доступности элемента */
-	readonly?: boolean;
-}
+import { SelectMenu as NS } from ".";
 
 /**
  * Компонент списка с возможностью выбора одного элемента, как активного
  */
-export class SelectMenu extends React.PureComponent<IProps, IState> {
-	state: IState = {
+export class SelectMenu extends React.PureComponent<NS.IProps, NS.IState> {
+	state: NS.IState = {
 		selection: Number.isNaN(this.props.selection) ? -1 : this.props.selection as number
 	};
 
-	constructor (props: IProps) {
+	constructor (props: NS.IProps) {
 		super(props);
 	}
 
@@ -104,7 +71,7 @@ export class SelectMenu extends React.PureComponent<IProps, IState> {
 	/**
      * Дочерний элемент для списка с возможность выбора
      */
-	public static Item (props: IItemProps, onClickEvent?: () => void, key?: number) {
+	public static Item (props: NS.IItemProps, onClickEvent?: () => void, key?: number) {
 		// Класс элемента и элемент изображения с условием
 		const className = [ "menu-item", props.className || "" ].join(" ").trim(),
 			iconImage = props.icon && <img src={getIconPath(props.icon)} alt="" className="icon" />;
