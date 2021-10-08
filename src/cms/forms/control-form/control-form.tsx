@@ -98,8 +98,7 @@ export default class ControlForm extends React.PureComponent<IProps, IState> {
 		const onSelectIndex = (item: number) => this.setState({ indexOfSection: item });
 
 		const controlElements = [
-			<Editor messageBoxWorker={this.messageBoxWorker} articleUUID={this.state.openArticleUUID} />,
-			<MaterialsList />
+			<Editor messageBoxWorker={this.messageBoxWorker} articleUUID={this.state.openArticleUUID} />
 		];
 
 		return (
@@ -107,35 +106,41 @@ export default class ControlForm extends React.PureComponent<IProps, IState> {
 			<div className="form content-block column no-centering nowrap" id="control-form">
 				<MessageBox worker={this.messageBoxWorker} state={this.state.messageBox} />
 
-				{/* Заголовок формы */}
-				<div className="content-header styled-block content-block row">
-					{/* Левая менюшка с выбором страницы */}
-					<div className="section content-block row">
-						<SelectMenu selection={1} onItemClick={onSelectIndex}>
-							<SelectMenu.Item icon="plus" readonly={!this.state.openArticleUUID}>
-								Редактор материала
-							</SelectMenu.Item>
-							<SelectMenu.Item icon="list">Список новостей</SelectMenu.Item>
-						</SelectMenu>
-					</div>
+				<AccountDataContext.Consumer>
+					{value =>
+						value && (
+							<React.Fragment>
+								{/* Заголовок формы */}
+								<div className="content-header styled-block content-block row">
+									{/* Левая менюшка с выбором страницы */}
+									<div className="section content-block row">
+										<SelectMenu selection={1} onItemClick={onSelectIndex}>
+											<SelectMenu.Item icon="plus" readonly={!this.state.openArticleUUID}>
+												Редактор материала
+											</SelectMenu.Item>
+											<SelectMenu.Item icon="list">Список новостей</SelectMenu.Item>
+										</SelectMenu>
+									</div>
 
-					{/* Правое меню с именем текущего пользователя и кнопкой выхода */}
-					<div className="section content-block row right">
-						<AccountDataContext.Consumer>
-							{value =>
-								value && (
-									<SelectMenu selectable={false} onItemClick={this.exitButtonClickHandler}>
-										<SelectMenu.Item readonly={true} icon="man-user">
-											{fullNameShort(value.fullName)}
-										</SelectMenu.Item>
-										<SelectMenu.Item icon="logout">Выйти</SelectMenu.Item>
-									</SelectMenu>
+									{/* Правое меню с именем текущего пользователя и кнопкой выхода */}
+									<div className="section content-block row right">
+										<SelectMenu selectable={false} onItemClick={this.exitButtonClickHandler}>
+											<SelectMenu.Item readonly={true} icon="man-user">
+												{fullNameShort(value.fullName)}
+											</SelectMenu.Item>
+											<SelectMenu.Item icon="logout">Выйти</SelectMenu.Item>
+										</SelectMenu>
+									</div>
+								</div>
+
+								{this.state.indexOfSection == 1 ? (
+									<MaterialsList accountContext={value} />
+								) : (
+									controlElements[this.state.indexOfSection]
 								)}
-						</AccountDataContext.Consumer>
-					</div>
-				</div>
-
-				{controlElements[this.state.indexOfSection]}
+							</React.Fragment>
+						)}
+				</AccountDataContext.Consumer>
 			</div>
 		);
 	}
