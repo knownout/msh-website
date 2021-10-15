@@ -31,7 +31,12 @@ export default class DefaultPage extends React.Component<IDefaultPageProps, IDef
 
 	async componentDidMount () {
 		const location = window.location.pathname;
-		const pageContent = await fetch(configuration.api.server_path + configuration.api.get_articles + location)
+		const articlePath = location.split("/").filter(e => e.length > 1).slice(1).join("/"),
+			articleType = location.split("/").filter(e => e.length > 1)[0];
+
+		const pageContent = await fetch(
+			configuration.api.server_path + configuration.api.get_articles + articlePath + "&type=" + articleType
+		)
 			.then(req => req.json())
 			.catch(() => {
 				this.setState({ pageException: true });
@@ -45,6 +50,10 @@ export default class DefaultPage extends React.Component<IDefaultPageProps, IDef
 	}
 
 	public render () {
+		try {
+			document.title = this.state.pageContent.meta.content.title;
+		} catch (e) {}
+
 		return (
 			<PageWrapper {...this.props} loaded={this.state.contentLoaded} exception={this.state.pageException}>
 				{Object.keys(this.state.pageContent).length > 0 ? (

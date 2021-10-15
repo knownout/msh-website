@@ -50,8 +50,6 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
 		mobileMenuOpen: false
 	};
 
-	private websiteTitles = configuration.titleNames;
-
 	constructor (props: IHeaderProps) {
 		super(props);
 

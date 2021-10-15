@@ -13,6 +13,7 @@ import MaterialsList from "./materials-list";
 
 // Подключение стилей
 import "./control-form.less";
+import { OutputData } from "@editorjs/editorjs";
 
 interface IProps {
 	eraseData: () => void;
@@ -21,13 +22,15 @@ interface IProps {
 interface IState extends IMessageBoxParent {
 	openArticleUUID?: UUID;
 	indexOfSection: number;
+	editorData?: MaterialsList.IArticleRequestResult;
+	materialType: number;
 }
 
 /**
  * Главная управляющая форма админ-панели
  */
 export default class ControlForm extends React.PureComponent<IProps, IState> {
-	state: IState = { messageBox: { state: false }, indexOfSection: 1 };
+	state: IState = { messageBox: { state: false }, indexOfSection: 1, materialType: 0 };
 
 	constructor (props: IProps & IFormProps) {
 		super(props);
@@ -94,12 +97,19 @@ export default class ControlForm extends React.PureComponent<IProps, IState> {
 		this.messageBoxWorker.updateState(true);
 	}
 
+	private updateIndexOfSelection (
+		indexOfSection: number,
+		uuid: UUID,
+		articleData: MaterialsList.IArticleRequestResult,
+		type: number,
+		preview: string
+	) {
+		this.setState({ indexOfSection, openArticleUUID: uuid, editorData: { ...articleData, type: type, preview } });
+		this.forceUpdate();
+	}
+
 	render () {
 		const onSelectIndex = (item: number) => this.setState({ indexOfSection: item });
-
-		const controlElements = [
-			<Editor messageBoxWorker={this.messageBoxWorker} articleUUID={this.state.openArticleUUID} />
-		];
 
 		return (
 			// Основной блок, 100% по высоте и фиксированный по ширине
@@ -114,11 +124,11 @@ export default class ControlForm extends React.PureComponent<IProps, IState> {
 								<div className="content-header styled-block content-block row">
 									{/* Левая менюшка с выбором страницы */}
 									<div className="section content-block row">
-										<SelectMenu selection={1} onItemClick={onSelectIndex}>
+										<SelectMenu selection={this.state.indexOfSection} onItemClick={onSelectIndex}>
 											<SelectMenu.Item icon="plus" readonly={!this.state.openArticleUUID}>
 												Редактор материала
 											</SelectMenu.Item>
-											<SelectMenu.Item icon="list">Список новостей</SelectMenu.Item>
+											<SelectMenu.Item icon="list">Список материалов</SelectMenu.Item>
 										</SelectMenu>
 									</div>
 
@@ -134,9 +144,18 @@ export default class ControlForm extends React.PureComponent<IProps, IState> {
 								</div>
 
 								{this.state.indexOfSection == 1 ? (
-									<MaterialsList accountContext={value} />
+									<MaterialsList
+										accountContext={value}
+										messageBoxWorker={this.messageBoxWorker}
+										updateIndex={this.updateIndexOfSelection.bind(this)}
+									/>
 								) : (
-									controlElements[this.state.indexOfSection]
+									<Editor
+										messageBoxWorker={this.messageBoxWorker}
+										articleUUID={this.state.openArticleUUID}
+										data={this.state.editorData}
+										accountContext={value}
+									/>
 								)}
 							</React.Fragment>
 						)}

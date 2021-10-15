@@ -7,9 +7,9 @@ import { SelectMenu as NS } from ".";
 /**
  * Компонент списка с возможностью выбора одного элемента, как активного
  */
-export class SelectMenu extends React.PureComponent<NS.IProps, NS.IState> {
+export class SelectMenu extends React.Component<NS.IProps, NS.IState> {
 	state: NS.IState = {
-		selection: Number.isNaN(this.props.selection) ? -1 : this.props.selection as number
+		selection: (this.props.selection as number) || 0
 	};
 
 	constructor (props: NS.IProps) {
@@ -18,6 +18,8 @@ export class SelectMenu extends React.PureComponent<NS.IProps, NS.IState> {
 
 	componentDidUpdate () {
 		if (this.props.updateSelection) this.props.updateSelection(this.state.selection);
+		// if (this.props.selection && this.props.selection != this.state.selection)
+		if (this.state.selection != this.props.selection) this.setState({ selection: this.props.selection as number });
 	}
 
 	render () {

@@ -27,6 +27,8 @@ export namespace DateTimePicker {
 		 * @param date стандартная (текущая) дата
 		 */
 		onReady?(date: Date): void;
+
+		dateTime: string;
 	}
 
 	export interface IState {

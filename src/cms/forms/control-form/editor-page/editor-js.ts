@@ -7,8 +7,9 @@ const Warning = require("@editorjs/warning");
 const Marker = require("@editorjs/marker");
 const InlineCode = require("@editorjs/inline-code");
 const Image = require("@editorjs/image");
+const Delimiter = require("@editorjs/delimiter");
 
-import EditorJS, { API, BlockAPI, EditorConfig, LogLevels } from "@editorjs/editorjs";
+import EditorJS, { API, BlockAPI, EditorConfig, LogLevels, OutputData } from "@editorjs/editorjs";
 
 const EditorJSToolConfiguration = {
 	tools: {
@@ -29,6 +30,8 @@ const EditorJSToolConfiguration = {
 				uploader: {}
 			}
 		},
+
+		delimiter: Delimiter,
 
 		align: {
 			class: AlignmentTuneTool,
@@ -151,24 +154,27 @@ export default class EditorInstance {
 		...EditorJSLocalizationConfiguration
 	};
 
-	constructor (props?: Partial<EditorInstanceProps>) {
+	constructor (props: Partial<EditorInstanceProps>, content?: OutputData) {
+		const imageConfiguration = (this.editorConfig.tools as any).image as { [key: string]: any };
+
+		imageConfiguration.config.uploader = {
+			uploadByFile (file: File) {
+				const fileReader = new FileReader();
+				const promise = new Promise(resolve => {
+					const pull = (data: string) => resolve({ success: 1, file: { url: data } });
+
+					fileReader.onload = () => pull(String(fileReader.result));
+					fileReader.readAsDataURL(file);
+				});
+
+				return promise;
+			}
+		};
+
 		if (props && props.onImageLoaded && this.editorConfig.tools) {
-			const imageConfiguration = this.editorConfig.tools.image as { [key: string]: any };
-
-			imageConfiguration.config.uploader = {
-				uploadByFile (file: File) {
-					const fileReader = new FileReader();
-					const promise = new Promise(resolve => {
-						const pull = (data: string) => resolve({ success: 1, file: { url: data } });
-
-						fileReader.onload = () => pull(String(fileReader.result));
-						fileReader.readAsDataURL(file);
-					});
-
-					return promise;
-				}
-			};
 		}
+
+		if (content) this.editorConfig.data = content;
 
 		if (props && props.onChange) this.editorConfig.onChange = props.onChange;
 		if (props && props.onReady) this.editorConfig.onReady = props.onReady;

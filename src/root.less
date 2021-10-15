@@ -46,6 +46,14 @@ main#app-root {
 	flex-direction: column;
 	overflow: hidden;
 	user-select: none;
+
+	div.scrollarea {
+		height: 100%;
+
+		div.scrollarea-content {
+			height: fit-content;
+		}
+	}
 }
 
 div.screen-size-locker {
@@ -89,12 +97,7 @@ div#page-data-container {
 	display: block;
 
 	width: 100%;
-	overflow: hidden;
-	overflow-y: auto;
-
-	justify-content: center;
-	flex-direction: column;
-	// align-items: center;
+	height: fit-content;
 }
 
 a[href].icon {
@@ -108,4 +111,144 @@ a[href].block {
 
 div.cdx-notifies {
 	display: none;
+}
+
+div.page-with-pagination {
+	div.materials-area {
+		white-space: normal;
+		padding: 10px;
+		margin-top: 20px;
+
+		div.material-content {
+			padding: 10px;
+
+			// background: rgba(#000, .1);
+			background: lighten(@defaultLightColor, 5%);
+			border-radius: 4px;
+
+			position: relative;
+			display: flex;
+
+			gap: 10px;
+			align-items: center;
+			transition: 100ms ease all;
+
+			cursor: pointer;
+			user-select: none;
+
+			&:hover {
+				background: rgba(#000, .2);
+			}
+			overflow: hidden;
+		}
+
+		div.image-preview {
+			min-width: 120px;
+			min-height: 120px;
+
+			width: 120px;
+			height: 120px;
+
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+			border-radius: 4px;
+			position: relative;
+			display: block;
+
+			z-index: 10;
+		}
+
+		div.image-bg {
+			pointer-events: none;
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+
+			width: 100%;
+			height: 100%;
+
+			position: absolute;
+			display: block;
+
+			top: 0;
+			left: 0;
+			z-index: 0;
+
+			mask-image: linear-gradient(45deg, transparent 40%, rgba(#000, .25));
+			mask-mode: alpha;
+		}
+
+		div.material-title,
+		div.material-text {
+			position: relative;
+			display: block;
+
+			z-index: 10;
+			font-size: 15px;
+			font-weight: 500;
+			p {
+				margin: 0;
+			}
+		}
+
+		div.material-title {
+			font-weight: 700;
+		}
+	}
+
+	div.pagination-area {
+		position: relative;
+		display: flex;
+
+		margin-top: 20px;
+
+		width: 100%;
+		justify-content: center;
+		// align-items: center;
+	}
+	div.pagination-area[data-disabled="true"] {
+		opacity: .6;
+		pointer-events: none;
+
+		ul.pagination {
+			li {
+				a {
+					color: #3f360e;
+				}
+			}
+		}
+	}
+	div.pagination-area > ul.pagination {
+		display: flex;
+		flex-direction: row;
+
+		list-style-type: none;
+		user-select: none;
+
+		li {
+			cursor: pointer;
+			a {
+				padding: 6px 10px;
+				color: #70611d;
+
+				&:hover {
+					background-color: rgba(#a08a28, .16);
+				}
+			}
+		}
+		li.active {
+			pointer-events: none;
+			a {
+				background-color: rgba(#a08a28, .24);
+			}
+		}
+		li.disabled {
+			opacity: .6;
+			pointer-events: none;
+			a {
+				color: #3f360e;
+			}
+		}
+	}
 }

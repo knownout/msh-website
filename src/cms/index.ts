@@ -67,4 +67,21 @@ export function fullNameShort (name: string) {
 	return `${familyName} ${initials}`;
 }
 
+export function filterTitleInput (input: string) {
+	return input
+		.replace(/[^A-Za-z0-9а-яёА-ЯЁ .,]/g, "")
+		.replace(/\s{2,}/g, " ")
+		.replace(/\.{2,}/g, ".")
+		.replace(/\,{2,}/g, ",")
+		.replace(/\,\./g, ".")
+		.replace(/\.\,/g, ".")
+		.replace(/\s\./g, ".")
+		.replace(/\s\,/g, ",")
+		.replace(/\,([^\s])/g, ", $1")
+		.replace(/\.([^\s])/g, ". $1")
+		.replace(/\s{2,}/g, " ")
+		.replace(/\.\s([a-zа-яё])/g, (_, l) => `. ` + String(l).toLocaleUpperCase())
+		.trimLeft();
+}
+
 export default CMSRoot;

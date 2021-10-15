@@ -31,7 +31,7 @@ import "./datetime-picker.less";
  * @version 1.0.0
  */
 export class DateTimePicker extends React.PureComponent<NS.IProps, NS.IState> {
-	state: NS.IState = { dateTime: new Date(), minuteModifier: 5 };
+	state: NS.IState = { dateTime: new Date(Number.parseInt(this.props.dateTime)), minuteModifier: 5 };
 
 	constructor (props: NS.IProps) {
 		super(props);

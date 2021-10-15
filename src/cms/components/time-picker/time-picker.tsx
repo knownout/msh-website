@@ -64,6 +64,18 @@ export class TimePicker extends React.Component<NS.IProps, NS.IState> {
 	private readonly addLeadingSymbols = (value: number, length: number) =>
 		String(value).length < length ? Array(length - String(value).length).fill("0") + String(value) : String(value);
 
+	/**
+     * Внутренняя техническая функция реализующая конвертацию времени из типа TTimeIndex
+     * в тип string вида HH:mm
+     * @param data данные об индексах времени тип TTimeIndex
+     * @param modifier модификатор времени компонента
+     * @returns время в формате строки HH:mm
+     */
+	private readonly convertTime = (data: NS.TTimeIndex, modifier: number) =>
+		Object.values(data)
+			.map(e => this.addLeadingSymbols(e, 2))
+			.reduce((a, b) => a + ":" + this.addLeadingSymbols(Number(b) * modifier, 2));
+
 	/// __________________________________________________________________________________________________________________________________________ Генераторы
 
 	/**
@@ -96,7 +108,17 @@ export class TimePicker extends React.Component<NS.IProps, NS.IState> {
 		const createJSXElement = (text: string, key: number, selected: string, container: "minutes" | "hours") => {
 			// Контейнер событий элемента
 			const eventListeners = {
-				onClick: () => this.setSelectedTimeState({ [container]: key })
+				onClick: () =>
+					this.setSelectedTimeState({ [container]: key }, () => {
+						let { hours, minutes } = this.state.selectedTime;
+						minutes = minutes * this.state.modifier;
+
+						if (this.props.onChange)
+							this.props.onChange(
+								{ hours, minutes },
+								this.convertTime(this.state.selectedTime, this.state.modifier)
+							);
+					})
 			};
 
 			return <i {...{ "data-selected": selected, key, ...eventListeners }}>{text}</i>;
@@ -126,20 +148,6 @@ export class TimePicker extends React.Component<NS.IProps, NS.IState> {
          */
 		const createElements = (length: number, stateIndex: number, container: "minutes" | "hours", modifier = 1) =>
 			this.createElementsFromNumericList(this.createNumericList(length, modifier), stateIndex, container);
-
-		/// ______________________________________________________________________________________________________________________________________ Конверторы
-
-		/**
-         * Внутренняя техническая функция реализующая конвертацию времени из типа TTimeIndex
-         * в тип string вида HH:mm
-         * @param data данные об индексах времени тип TTimeIndex
-         * @param modifier модификатор времени компонента
-         * @returns время в формате строки HH:mm
-         */
-		const convertTime = (data: NS.TTimeIndex, modifier: number) =>
-			Object.values(data)
-				.map(e => this.addLeadingSymbols(e, 2))
-				.reduce((a, b) => a + ":" + this.addLeadingSymbols(Number(b) * modifier, 2));
 
 		/// ______________________________________________________________________________________________________________________________________ Обработчики событий
 
@@ -176,8 +184,12 @@ export class TimePicker extends React.Component<NS.IProps, NS.IState> {
 				minutes = minutes * m;
 
 				if (this.props.onChange)
-					this.props.onChange({ hours, minutes }, convertTime(this.state.selectedTime, m));
+					this.props.onChange({ hours, minutes }, this.convertTime(this.state.selectedTime, m));
 			});
+
+			e.preventDefault();
+			e.stopPropagation();
+			return false;
 		};
 
 		/// ______________________________________________________________________________________________________________________________________ Контейнеры атрибутов
@@ -234,7 +246,7 @@ export class TimePicker extends React.Component<NS.IProps, NS.IState> {
 					<div className="selection-result content-block column nowrap no-centering">
 						<span className="selection-result-title">Выбрано</span>
 						<span className="selection-result-content">
-							{convertTime(this.state.selectedTime, this.state.modifier)}
+							{this.convertTime(this.state.selectedTime, this.state.modifier)}
 						</span>
 					</div>
 

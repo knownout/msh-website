@@ -100,8 +100,11 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 			);
 		}
 
+		let articlesList = this.state.articlesList;
+		articlesList = articlesList.filter(e => e.meta.content.blocks.length > 0);
+
 		const bgImage = { backgroundImage: `url("${this.state.mainArticleData.preview}")` } as React.CSSProperties;
-		const articlesListPreviewText = this.state.articlesList.map(e => {
+		const articlesListPreviewText = articlesList.map(e => {
 			const block = e.meta.content.blocks.filter((i: any) => i.type == "paragraph")[0];
 			return { blocks: [ block ] } as DataProp;
 		});
@@ -113,7 +116,16 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 						<div className="content-block row main-article-wrapper">
 							<div className="bg-image" style={bgImage} />
 							<div className="content-block row limited">
-								<div className="content-block row" id="main-article" style={bgImage}>
+								<div
+									className="content-block row"
+									id="main-article"
+									style={bgImage}
+									onClick={() => {
+										try {
+											window.location.href = "news/" + this.state.mainPageData.meta.main_article;
+										} catch (e) {}
+									}}
+								>
 									<div className="content-block column text-content">
 										<span className="date">{getTextTime(this.state.mainArticleData.date)}</span>
 										<span className="title">{this.state.mainArticleData.title}</span>
@@ -129,28 +141,33 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 						</div>
 						<div className="content-block row" id="latest-articles">
 							<ScrollMenu childrenWidth={340}>
-								{this.state.articlesList.map((e, i) => (
-									<div
-										className="article content-block column"
-										key={Math.random()}
-										data-bg={!!e.meta.preview}
-										onClick={() => {
-											window.location.href = this.state.mainPageData.meta.articles[i];
-										}}
-									>
-										{e.meta.preview && (
-											<div
-												className="bg-image"
-												style={{ backgroundImage: `url(${e.meta.preview})` }}
-											/>
-										)}
+								{articlesList.map((e, i) => {
+									return (
+										<div
+											className="article content-block column"
+											key={Math.random()}
+											data-bg={!!e.meta.preview}
+											onClick={() => {
+												window.location.href =
+													"news/" + this.state.mainPageData.meta.articles[i];
+											}}
+										>
+											{e.meta.preview && (
+												<div
+													className="bg-image"
+													style={{ backgroundImage: `url(${e.meta.preview})` }}
+												/>
+											)}
 
-										<div className="content">{<Blocks data={articlesListPreviewText[i]} />}</div>
+											<div className="content">
+												{<Blocks data={articlesListPreviewText[i]} />}
+											</div>
 
-										<span className="date">{getTextTime(e.meta.content.time as number)}</span>
-										<span className="title">{e.meta.content.title}</span>
-									</div>
-								))}
+											<span className="date">{getTextTime(e.meta.content.time as number)}</span>
+											<span className="title">{e.meta.content.title}</span>
+										</div>
+									);
+								})}
 							</ScrollMenu>
 							<div className="button-wrapper">
 								<div className="button">Архив новостей</div>

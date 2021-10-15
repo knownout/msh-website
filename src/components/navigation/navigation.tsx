@@ -19,6 +19,7 @@ export default class Navigation extends React.Component<INavigationProps, INavig
 
 	private getParentalRoute (e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
 		const target = e.target as HTMLElement;
+
 		const clickableItem = [ "title", "sub-item", "item", "sub-title" ]
 			.map(e => target.classList.contains(e))
 			.reduce((a, b) => a || b);
@@ -60,7 +61,7 @@ export default class Navigation extends React.Component<INavigationProps, INavig
 					id="navigation-content"
 					onClick={e => {
 						const route = this.getParentalRoute(e);
-						if (route) window.location.href = route;
+						if (route) window.location.href = "pages" + route;
 					}}
 				>
 					<div className="point">

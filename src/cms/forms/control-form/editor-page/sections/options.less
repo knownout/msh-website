@@ -48,3 +48,81 @@ div.preview-image {
 		text-align: center;
 	}
 }
+
+// ______________________________________________________________________________________ CHECKBOX
+
+div.checkbox {
+	position: relative;
+	display: flex;
+
+	flex-direction: row;
+	align-items: center;
+
+	max-width: 100%;
+	width: 100%;
+
+	gap: 5px;
+	cursor: pointer;
+
+	transition: 100ms ease all;
+	padding: 10px;
+
+	border-radius: 4px;
+	background: transparent;
+
+	&:hover {
+		div.checkbox-checker {
+			background: rgba(#000, .27);
+		}
+		div.checkbox-label {
+			opacity: .95;
+		}
+	}
+
+	&[data-checked="true"] {
+		background: rgba(#000, .05);
+	}
+	&[data-checked="true"] div.checkbox-checker::after {
+		transform: scale(1, 1);
+	}
+
+	div.checkbox-checker {
+		position: relative;
+		display: block;
+
+		width: 20px;
+		height: 20px;
+
+		border-radius: 4px;
+		background: rgba(#000, .2);
+		transition: inherit;
+
+		&::after {
+			content: "";
+			position: absolute;
+			display: block;
+
+			width: calc(100% - 8px);
+			height: calc(100% - 8px);
+			top: 4px;
+			left: 4px;
+
+			border-radius: inherit;
+
+			background: rgba(#000, .4);
+			transition: inherit;
+
+			transform: scale(0, 0);
+		}
+	}
+
+	div.checkbox-label {
+		font-weight: 500;
+		opacity: .8;
+
+		font-size: 15px;
+		// transform: translateY(-2px);
+
+		transition: inherit;
+	}
+}

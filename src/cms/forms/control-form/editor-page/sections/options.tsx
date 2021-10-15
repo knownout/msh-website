@@ -2,6 +2,7 @@ import React from "react";
 import { Base64EncodedImage } from "..";
 import DateTimePicker from "../../../../components/datetime-picker";
 import Dropdown, { DropdownContext } from "../../../../components/dropdown";
+import MaterialsList from "../../materials-list";
 import { Editor } from "../editor-page";
 
 import "./options.less";
@@ -22,6 +23,12 @@ namespace NS {
 
 		/** Метод отправки данных материала в модуль публикации */
 		publish(options: Partial<Editor.IOptionsData>): void;
+		editorData?: MaterialsList.IArticleRequestResult;
+
+		tagsList: { [key: string]: any };
+		checkedTagsList: string[];
+
+		updateCheckedTagsList(checkedTagsList: string[]): void;
 	}
 
 	/**
@@ -67,18 +74,21 @@ export default function Options (props: NS.IOptionsProps) {
 		dateChange = (date: Date) => props.updateOptions({ publishDate: date });
 
 	const articleType = props.options.type || 0;
+	// const editorData = props.editorData as MaterialsList.IArticleRequestResult;
 
 	return (
 		<div className="section aside-menu content-block column styled-block no-centering">
 			<span className="title">Параметры материала</span>
-			<span className="title text-title">Тип материала</span>
+			<span className="title text-title">
+				Тип материала: {articleType == 0 ? "Новость" : articleType == 1 ? "Документ" : "Страница"}
+			</span>
 
 			{/* Меню выбора типа редактируемого материала */}
-			<Dropdown select={articleType} openTimeOut={500} onChange={articleTypeChange}>
+			{/* <Dropdown select={articleType} openTimeOut={500} onChange={articleTypeChange}>
 				<Dropdown.Item>Новость</Dropdown.Item>
 				<Dropdown.Item>Документ</Dropdown.Item>
 				<Dropdown.Item>Страница</Dropdown.Item>
-			</Dropdown>
+			</Dropdown> */}
 
 			{/* Меню выбора даты и времени текущего материала. Доступно, если тип материала - новость */}
 			<span className="title text-title">Дата публикации</span>
@@ -86,7 +96,20 @@ export default function Options (props: NS.IOptionsProps) {
 				<Dropdown rawContent={true} openTimeOut={500}>
 					<DropdownContext.Consumer>
 						{dropdown => (
-							<DateTimePicker contextOptions={dropdown} onChange={dateChange} onReady={dateChange} />
+							<DateTimePicker
+								contextOptions={dropdown}
+								onChange={dateChange}
+								onReady={dateChange}
+								dateTime={
+									props.editorData ? props.editorData.time == "0" ? (
+										Date.now().toString()
+									) : (
+										props.editorData.time
+									) : (
+										Date.now().toString()
+									)
+								}
+							/>
 						)}
 					</DropdownContext.Consumer>
 				</Dropdown>
@@ -99,6 +122,26 @@ export default function Options (props: NS.IOptionsProps) {
 					setPreview={image => props.updateOptions({ preview: image })}
 					preview={props.options.preview}
 				/>
+			</NS.Available>
+
+			<span className="title text-title">Также опубликовать в:</span>
+			<NS.Available condition={articleType != 2}>
+				{Object.keys(props.tagsList).map(e => {
+					return (
+						<Checkbox
+							label={e}
+							key={Math.random()}
+							defaultValue={props.checkedTagsList.includes(e)}
+							onChange={(state, label) => {
+								if (!state) {
+									props.updateCheckedTagsList(props.checkedTagsList.filter(e => e != label));
+								} else props.updateCheckedTagsList([ ...props.checkedTagsList, label ]);
+
+								console.log(props.checkedTagsList);
+							}}
+						/>
+					);
+				})}
 			</NS.Available>
 
 			<div className="button" onClick={() => props.publish(props.options)}>
@@ -139,12 +182,35 @@ function Preview (props: NS.EditorPreviewProps) {
 		dialog.click();
 	};
 
+	let preview: any = props.preview ? props.preview.content : "";
+	if (!props.preview || props.preview.content == "") preview = undefined;
+
 	return (
 		<div className="preview-image content-block column gap-10" onClick={clickEventHandler}>
-			{props.preview && (
-				<div className="image-container" style={{ backgroundImage: `url(${props.preview.content})` }} />
-			)}
+			{preview && <div className="image-container" style={{ backgroundImage: `url(${preview})` }} />}
 			<span className="preview-hint">Клик, чтобы выбрать превью материала</span>
+		</div>
+	);
+}
+
+interface ICheckboxProps {
+	defaultValue?: boolean;
+
+	onChange?(state: boolean, label: string, event: React.MouseEvent<HTMLDivElement, MouseEvent>): void;
+	label: string;
+}
+
+function Checkbox (props: ICheckboxProps) {
+	const [ checked, setChecked ] = React.useState(props.defaultValue || false);
+	const clickEvent = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		if (props.onChange) props.onChange(!checked, props.label, event);
+		setChecked(!checked);
+	};
+
+	return (
+		<div className="checkbox" data-checked={String(checked)} onClick={clickEvent}>
+			<div className="checkbox-checker" />
+			<div className="checkbox-label">{props.label}</div>
 		</div>
 	);
 }
