@@ -76,6 +76,13 @@ export default function Options (props: NS.IOptionsProps) {
 	const articleType = props.options.type || 0;
 	// const editorData = props.editorData as MaterialsList.IArticleRequestResult;
 
+	const tagNameList = Object.keys(props.tagsList).map(e => {
+		let val = e.split("_").slice(-1)[0];
+		val = val[0].toLocaleUpperCase() + val.slice(1);
+
+		return [ val, e ];
+	});
+
 	return (
 		<div className="section aside-menu content-block column styled-block no-centering">
 			<span className="title">Параметры материала</span>
@@ -126,12 +133,13 @@ export default function Options (props: NS.IOptionsProps) {
 
 			<span className="title text-title">Также опубликовать в:</span>
 			<NS.Available condition={articleType != 2}>
-				{Object.keys(props.tagsList).map(e => {
+				{tagNameList.map(e => {
 					return (
 						<Checkbox
-							label={e}
+							originalTagName={e[1]}
+							label={e[0]}
 							key={Math.random()}
-							defaultValue={props.checkedTagsList.includes(e)}
+							defaultValue={props.checkedTagsList.includes(e[1])}
 							onChange={(state, label) => {
 								if (!state) {
 									props.updateCheckedTagsList(props.checkedTagsList.filter(e => e != label));
@@ -198,12 +206,13 @@ interface ICheckboxProps {
 
 	onChange?(state: boolean, label: string, event: React.MouseEvent<HTMLDivElement, MouseEvent>): void;
 	label: string;
+	originalTagName: string;
 }
 
 function Checkbox (props: ICheckboxProps) {
 	const [ checked, setChecked ] = React.useState(props.defaultValue || false);
 	const clickEvent = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-		if (props.onChange) props.onChange(!checked, props.label, event);
+		if (props.onChange) props.onChange(!checked, props.originalTagName, event);
 		setChecked(!checked);
 	};
 

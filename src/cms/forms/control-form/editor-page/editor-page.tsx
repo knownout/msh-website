@@ -241,7 +241,11 @@ export default class Editor extends React.Component<Editor.IProps, Editor.IState
 		});
 
 		// console.log("123", options.preview);
-		if (options.preview && options.preview.content.slice(0, 10) == "data:image") {
+		if (
+			options.preview &&
+			options.preview.content != null &&
+			options.preview.content.slice(0, 10) == "data:image"
+		) {
 			const file = await urltoFile(options.preview.content, Math.random().toString(), "image/jpeg");
 			form.append("Material-Preview", file);
 		}
@@ -260,6 +264,7 @@ export default class Editor extends React.Component<Editor.IProps, Editor.IState
 		})
 			.then(res => res.json())
 			.then(res => {
+				console.log(res);
 				if (res.success == true) {
 					this.props.messageBoxWorker.updateContent({
 						require: false,

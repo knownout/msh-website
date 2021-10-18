@@ -103,6 +103,9 @@ class App extends React.Component<AppProps, AppState> {
 									<Route exact path="/pages/testPage">
 										<PageWithPagination height={height} />
 									</Route>
+									<Route exact path="/pages/информация_новости_вакансии">
+										<PageWithPagination height={height} />
+									</Route>
 									<Route path="*">
 										<DefaultPage height={height} />
 									</Route>
@@ -174,7 +177,11 @@ class PageWithPagination extends React.PureComponent<IPageWithPaginationProps, I
 
 	private perPage = 8;
 	async componentDidMount () {
-		const pageTag = window.location.pathname.split("/").slice(-1)[0];
+		let formattedPageTag = window.location.pathname.split("/").slice(-1)[0].replace(/\-/g, " ");
+		formattedPageTag = decodeURI(formattedPageTag[0].toLocaleUpperCase() + formattedPageTag.slice(1));
+		// console.log(formattedPageTag, this.state.pageException);
+
+		const pageTag = decodeURI(window.location.pathname.split("/").slice(-1)[0]);
 		const location = window.location.pathname;
 		const articlePath = location.split("/").filter(e => e.length > 1).slice(1).join("/"),
 			articleType = location.split("/").filter(e => e.length > 1)[0];
@@ -183,7 +190,7 @@ class PageWithPagination extends React.PureComponent<IPageWithPaginationProps, I
 			configuration.api.server_path + configuration.api.get_articles + articlePath + "&type=" + articleType
 		)
 			.then(req => req.json())
-			.catch(() => {
+			.catch(e => {
 				this.setState({ pageException: true });
 			});
 
@@ -194,6 +201,7 @@ class PageWithPagination extends React.PureComponent<IPageWithPaginationProps, I
 				"Data-Action": "TAGLIST"
 			})
 		}).then(res => res.json());
+		console.log(tagList);
 
 		if (tagList.success == true) {
 			const { news, documents } = tagList.meta.content as { [key: string]: string[] };
@@ -237,10 +245,6 @@ class PageWithPagination extends React.PureComponent<IPageWithPaginationProps, I
 			height: this.props.height,
 			exception: this.state.pageException
 		};
-
-		let formattedPageTag = window.location.pathname.split("/").slice(-1)[0].replace(/\-/g, " ");
-		formattedPageTag = formattedPageTag[0].toLocaleUpperCase() + formattedPageTag.slice(1);
-		console.log(formattedPageTag);
 
 		return (
 			<PageWrapper {...pageWrapperAttributes}>

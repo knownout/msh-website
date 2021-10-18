@@ -61,7 +61,8 @@ export default class Navigation extends React.Component<INavigationProps, INavig
 					id="navigation-content"
 					onClick={e => {
 						const route = this.getParentalRoute(e);
-						if (route) window.location.href = "pages" + route;
+						if (route)
+							window.location.href = "pages/" + route.split("/").filter(e => e.length > 0).join("_");
 					}}
 				>
 					<div className="point">
@@ -162,7 +163,13 @@ export default class Navigation extends React.Component<INavigationProps, INavig
 					<div className="point">
 						<span className="title">Информация</span>
 						<div className="container">
-							<span className="item">Новости</span>
+							<div className="sub-point">
+								<span className="sub-title">Новости</span>
+								<div className="sub-container bottom left">
+									<span className="sub-item">Вакансии</span>
+									<span className="sub-item">Госуслуги</span>
+								</div>
+							</div>
 							<span className="item">Отчеты</span>
 							<span className="item">Доклады</span>
 							<span className="item">Мониторинг</span>
