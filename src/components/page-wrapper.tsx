@@ -7,6 +7,8 @@ interface IPageWrapperProps {
 	children?: any;
 	id?: string;
 	exception?: boolean;
+
+	className?: string;
 }
 interface IPageWrapperState {
 	pageCentered: boolean;
@@ -53,11 +55,13 @@ export default class PageWrapper extends React.Component<IPageWrapperProps, IPag
 	public render () {
 		return (
 			<div
-				className="page-wrapper"
+				className={[ "page-wrapper", this.props.className || "" ].join(" ").trim()}
 				data-centered={this.state.pageCentered}
 				ref={this.pageContainerRef}
 				style={{ minHeight: this.props.height }}
 				id={this.props.id}
+				data-height={this.props.height + "px"}
+				data-loaded={this.props.loaded.toString()}
 			>
 				<div className="page-content" ref={this.pageBlocksRendererRef}>
 					{this.props.exception ? (
@@ -65,7 +69,16 @@ export default class PageWrapper extends React.Component<IPageWrapperProps, IPag
 					) : this.props.loaded ? (
 						this.props.children
 					) : (
-						<span>Загрузка...</span>
+						<div
+							className="loader content-block column"
+							style={{
+								height: `${this.props.height}px`,
+								width: "100%",
+								position: "relative",
+								zIndex: 1000
+								// backgroundColor: "red"
+							}}
+						/>
 					)}
 				</div>
 			</div>

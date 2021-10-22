@@ -9,6 +9,7 @@ import PageWrapper from "../../components/page-wrapper";
 
 interface IDefaultPageProps {
 	height: number;
+	className?: string;
 }
 interface IDefaultPageState {
 	contentLoaded: boolean;
@@ -55,7 +56,12 @@ export default class DefaultPage extends React.Component<IDefaultPageProps, IDef
 		} catch (e) {}
 
 		return (
-			<PageWrapper {...this.props} loaded={this.state.contentLoaded} exception={this.state.pageException}>
+			<PageWrapper
+				{...this.props}
+				loaded={this.state.contentLoaded}
+				exception={this.state.pageException}
+				className={this.props.className}
+			>
 				{Object.keys(this.state.pageContent).length > 0 ? (
 					<React.Fragment>
 						{this.state.pageContent.meta.content.time && (

@@ -97,7 +97,9 @@ div#page-data-container {
 	display: block;
 
 	width: 100%;
-	height: fit-content;
+	height: 100%;
+	overflow: auto;
+	overflow-x: hidden;
 }
 
 a[href].icon {
@@ -114,9 +116,13 @@ div.cdx-notifies {
 }
 
 div.page-with-pagination {
+	transition: 100ms ease all;
+	// padding: 10px;
+
 	div.materials-area {
+		transition: inherit;
 		white-space: normal;
-		padding: 10px;
+		// padding: 10px;
 		margin-top: 20px;
 
 		div.material-content {
@@ -128,6 +134,8 @@ div.page-with-pagination {
 
 			position: relative;
 			display: flex;
+
+			width: 100%;
 
 			gap: 10px;
 			align-items: center;
@@ -249,6 +257,23 @@ div.page-with-pagination {
 			a {
 				color: #3f360e;
 			}
+		}
+	}
+
+	@media screen and (max-width: 720px) {
+		div.materials-area div.material-content div.content-container div.material-title {
+			word-break: break-word;
+			text-align: left;
+		}
+		div.materials-area div.material-content div.content-container div.material-text {
+			display: none;
+		}
+		div.materials-area div.material-content div.image-preview {
+			min-width: 80px;
+			min-height: 80px;
+
+			width: 80px;
+			height: 80px;
 		}
 	}
 }

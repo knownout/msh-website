@@ -155,18 +155,17 @@ export default class Editor extends React.Component<Editor.IProps, Editor.IState
 			preview: options.preview
 		};
 
-		const conditions = [ properties.content.length >= 3, properties.title.length >= 10 ];
+		const conditions = [ properties.content.length >= 1, properties.title.length >= 4 ];
 		let message: [string, string] = [ "", "" ];
 
 		if (!conditions[0])
 			message = [
 				"Слишком короткая новость",
-				"Количество блоков в созданном материале не превышает трех, " +
-					"что является недопустимым размером для материла"
+				"В материале нет ни одного блока, " + "что является недопустимым размером для материла"
 			];
 
 		if (!conditions[1])
-			message = [ "Слишком короткий заголовок", "Длина строки заголовка должна превышать десять символов" ];
+			message = [ "Слишком короткий заголовок", "Длина строки заголовка должна превышать четыре символа" ];
 
 		if (!conditions.reduce((a, b) => a && b)) {
 			this.props.messageBoxWorker.updateContent({

@@ -47,9 +47,9 @@ export const configuration = {
 	} as { [key: number]: string[] },
 
 	socialLinks: {
-		telegram: "https://web.telegram.org/",
-		viber: "https://www.viber.com/ru/",
-		facebook: "https://www.facebook.com/"
+		telegram: "https://t.me/mshipr/",
+		viber: "https://invite.viber.com/?g2=AQAA5kCy5QHIP03XieLEzaPlXOrjK%2BeEduj73m1SMPn%2Bm6XuBwWTWBXXvJLnZeMm/",
+		facebook: "https://www.facebook.com/minagroeco/"
 	},
 
 	monthsName: [
@@ -71,7 +71,7 @@ export const configuration = {
 		get_articles: "api/articles.php?action=get&path=",
 		get_info_content: "api/articles.php?action=get&type=info&path=",
 		POST_upload_article: "api/upload.php",
-		server_path: "http://192.168.100.170/",
+		server_path: "http://192.168.100.170/" /*window.location.origin + "/"*/,
 		fetch_title_page: "api/fetch-title-page-data.php",
 		authorization: "api/auth.php?login=",
 		temp_upload: "api/temp_upload.php",

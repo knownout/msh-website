@@ -139,13 +139,15 @@ export class MaterialsList extends React.Component<MaterialsList.IProps, Materia
 						</span>
 						<span className="material-title">{props.content.title}</span>
 						<div className="material-description">
-							<Blocks
-								data={{
-									time: 0,
-									version: "0",
-									blocks: [ props.content.blocks.filter(e => e.type == "paragraph")[0] ]
-								}}
-							/>
+							{props.content.blocks.filter(e => e.type == "paragraph").length > 0 && (
+								<Blocks
+									data={{
+										time: 0,
+										version: "0",
+										blocks: [ props.content.blocks.filter(e => e.type == "paragraph")[0] ]
+									}}
+								/>
+							)}
 						</div>
 						<div className="material-buttons-holder content-block row nowrap gap-10">
 							<div

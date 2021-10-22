@@ -1,0 +1,67 @@
+@defaultLightColor: #e5deba;
+@defaultDarkColor: #1d1e2c;
+
+div.pwp-wrapper {
+	div.pwp-data-text {
+		padding: 0;
+	}
+
+	ul.pagination {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+
+		list-style-type: none;
+
+		user-select: none;
+
+		li.disabled {
+			opacity: .6;
+			pointer-events: none;
+		}
+		& > li {
+			position: relative;
+			display: flex;
+
+			cursor: pointer;
+
+			min-width: 30px;
+			height: 30px;
+
+			width: fit-content;
+
+			// background: rgba(@defaultLightColor, .2);
+			&.active {
+				background: rgba(@defaultLightColor, .8);
+			}
+			border-radius: 4px;
+
+			&.previous a {
+				padding: 0 10px;
+				margin-right: 5px;
+			}
+
+			&.next a {
+				padding: 0 10px;
+				margin-left: 5px;
+			}
+
+			a {
+				color: rgba(darken(@defaultLightColor, 50%), .9);
+				border-radius: 4px;
+				position: relative;
+				display: flex;
+
+				justify-content: center;
+				align-items: center;
+
+				width: 100%;
+				height: 100%;
+
+				&:hover {
+					background: rgba(@defaultLightColor, .7);
+				}
+			}
+		}
+	}
+}

@@ -168,6 +168,9 @@ export default class Navigation extends React.Component<INavigationProps, INavig
 								<div className="sub-container bottom left">
 									<span className="sub-item">Вакансии</span>
 									<span className="sub-item">Госуслуги</span>
+									<span className="sub-item">Конкурсы</span>
+									<span className="sub-item">Статьи</span>
+									<span className="sub-item">Тендеры</span>
 								</div>
 							</div>
 							<span className="item">Отчеты</span>
