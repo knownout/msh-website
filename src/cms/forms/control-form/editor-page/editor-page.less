@@ -9,6 +9,55 @@ div.content-container#content-editor {
 	margin-top: -10px;
 	margin-bottom: 0;
 
+	div.cdx-attaches {
+		position: relative;
+		display: flex;
+
+		flex-direction: row;
+		gap: 10px;
+		padding: 20px;
+
+		border: 1px solid rgba(#000, .2);
+		border-radius: 4px;
+
+		align-items: center;
+
+		a.cdx-attaches__download-button {
+			margin-left: auto;
+		}
+
+		div.cdx-attaches__size {
+			position: relative;
+			display: flex;
+
+			margin-top: 6px;
+
+			flex-direction: row;
+			gap: 4px;
+
+			opacity: .8;
+			font-size: 14px;
+			&::after {
+				content: attr(data-size);
+				position: relative;
+				display: block;
+			}
+		}
+	}
+
+	div.ce-delimiter.cdx-block {
+		&::before {
+			content: "";
+			display: none;
+		}
+
+		border-top: 1px dashed rgba(#000, .2);
+		padding: 10px 0;
+		margin: 20px;
+
+		width: calc(100% - 40px);
+	}
+
 	// Параметры для компонента выпадающего списка
 	div.dropdown {
 		width: 100%;

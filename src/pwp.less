@@ -1,9 +1,121 @@
 @defaultLightColor: #e5deba;
 @defaultDarkColor: #1d1e2c;
 
+div.pwp-content {
+	margin-top: -40px;
+}
 div.pwp-wrapper {
 	div.pwp-data-text {
 		padding: 0;
+	}
+
+	div.pwp-articles-list {
+		position: relative;
+		display: flex;
+
+		flex-direction: column;
+
+		transition: inherit;
+		white-space: normal;
+		// padding: 10px;
+		margin-top: 20px;
+		gap: 10px;
+
+		@media screen and (max-width: 720px) {
+			div.material-content div.content-container div.material-title {
+				word-break: break-word;
+				text-align: left;
+			}
+			div.material-content div.content-container div.material-text {
+				display: none;
+			}
+			div.material-content div.image-preview {
+				min-width: 80px;
+				min-height: 80px;
+
+				width: 80px;
+				height: 80px;
+			}
+		}
+
+		div.material-content {
+			padding: 10px;
+
+			// background: rgba(#000, .1);
+			background: lighten(@defaultLightColor, 5%);
+			border-radius: 4px;
+
+			position: relative;
+			display: flex;
+
+			width: 100%;
+
+			gap: 10px;
+			align-items: center;
+			transition: 100ms ease all;
+
+			cursor: pointer;
+			user-select: none;
+
+			&:hover {
+				background: rgba(#000, .2);
+			}
+			overflow: hidden;
+		}
+
+		div.image-preview {
+			min-width: 120px;
+			min-height: 120px;
+
+			width: 120px;
+			height: 120px;
+
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+			border-radius: 4px;
+			position: relative;
+			display: block;
+
+			z-index: 10;
+		}
+
+		div.image-bg {
+			pointer-events: none;
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+
+			width: 100%;
+			height: 100%;
+
+			position: absolute;
+			display: block;
+
+			top: 0;
+			left: 0;
+			z-index: 0;
+
+			mask-image: linear-gradient(45deg, transparent 40%, rgba(#000, .25));
+			mask-mode: alpha;
+		}
+
+		div.material-title,
+		div.material-text {
+			position: relative;
+			display: block;
+
+			z-index: 10;
+			font-size: 15px;
+			font-weight: 500;
+			p {
+				margin: 0;
+			}
+		}
+
+		div.material-title {
+			font-weight: 700;
+		}
 	}
 
 	ul.pagination {
@@ -15,6 +127,13 @@ div.pwp-wrapper {
 
 		user-select: none;
 
+		width: 100%;
+
+		justify-content: center;
+		padding: 0;
+		margin: 0;
+
+		margin-top: 30px;
 		li.disabled {
 			opacity: .6;
 			pointer-events: none;

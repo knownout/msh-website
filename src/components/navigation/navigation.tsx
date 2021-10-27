@@ -59,10 +59,21 @@ export default class Navigation extends React.Component<INavigationProps, INavig
 				<div
 					className="content-block row"
 					id="navigation-content"
-					onClick={e => {
+					onMouseDown={e => {
+						if (e.button == 1) e.preventDefault();
+					}}
+					onMouseUp={e => {
 						const route = this.getParentalRoute(e);
-						if (route)
-							window.location.href = "pages/" + route.split("/").filter(e => e.length > 0).join("_");
+						console.log(e.button);
+
+						if (route) {
+							if (e.button === 1)
+								window.open("pages/" + route.split("/").filter(e => e.length > 0).join("_"), "_blank");
+							else window.location.href = "pages/" + route.split("/").filter(e => e.length > 0).join("_");
+						}
+
+						e.preventDefault();
+						e.stopPropagation();
 					}}
 				>
 					<div className="point">

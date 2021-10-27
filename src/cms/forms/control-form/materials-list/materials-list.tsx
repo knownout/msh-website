@@ -25,6 +25,9 @@ export namespace MaterialsList {
 		accountContext: TAccountData;
 		messageBoxWorker: MessageBoxWorker;
 		updateIndex: (index: number, uuid: UUID, data: IArticleRequestResult, type: number, preview: string) => void;
+
+		parentMaterialsList: any;
+		setParentMaterialsList: (materials: any) => void;
 	}
 
 	export type TRequestFalseResult = { reason: string };
@@ -95,9 +98,22 @@ export class MaterialsList extends React.Component<MaterialsList.IProps, Materia
 		const materialsUIDList = (await this.fetchAPIContent(formData)).meta;
 		const materialsList = [];
 
-		for await (const uid of materialsUIDList.deferred) materialsList.push(await this.readMaterialData(uid));
-		for await (const uid of materialsUIDList.current) materialsList.push(await this.readMaterialData(uid));
+		if (
+			this.props.parentMaterialsList.length ==
+			materialsUIDList.current.length + materialsUIDList.deferred.length
+		) {
+			this.setState({ materialsList: this.props.parentMaterialsList });
+			return (this.props.parentMaterialsList as any) as MaterialsList.IArticleContentRequestResult[];
+		}
 
+		console.log(materialsUIDList);
+		for await (const uid of materialsUIDList.deferred) materialsList.push(await this.readMaterialData(uid));
+		for await (const uid of materialsUIDList.current) {
+			materialsList.push(await this.readMaterialData(uid));
+		}
+
+		this.setState({ materialsList: materialsList as any });
+		// this.props.setParentMaterialsList(materialsList);
 		return (materialsList as any) as MaterialsList.IArticleContentRequestResult[];
 	}
 
@@ -111,7 +127,7 @@ export class MaterialsList extends React.Component<MaterialsList.IProps, Materia
 	}
 
 	async componentDidMount () {
-		this.setState({ materialsList: await this.fetchMaterialsList() });
+		await this.fetchMaterialsList();
 	}
 
 	render () {
@@ -125,9 +141,10 @@ export class MaterialsList extends React.Component<MaterialsList.IProps, Materia
 
 		function Material (props: MaterialsList.IArticleContentRequestResult & { type: number }) {
 			const bgImage = { backgroundImage: `url(${props.preview})` } as React.CSSProperties;
+			const ref = React.createRef<HTMLDivElement>();
 
 			return (
-				<div className="content-block row no-centering material gap-10 nowrap">
+				<div className="content-block row no-centering material gap-10 nowrap" ref={ref}>
 					{props.preview && <div className="preview-image" style={bgImage} />}
 
 					<div className="material-context styled-block content-block column no-centering nowrap">
@@ -177,8 +194,9 @@ export class MaterialsList extends React.Component<MaterialsList.IProps, Materia
 														}
 													).then(req => req.text());
 
-													setState({ materialsList: await fetchMaterialsList() });
 													worker.updateState(false);
+													// setState({ materialsList: await fetchMaterialsList() });
+													if (ref.current) ref.current.remove();
 												}
 											},
 											{ text: "Отмена" }
@@ -236,23 +254,21 @@ export class MaterialsList extends React.Component<MaterialsList.IProps, Materia
 
 		return (
 			<div className="content-container content-block row no-centering gap-10 nowrap" id="content-list">
-				<ScrollArea smoothScrolling={true}>
-					<div className="materials-wrapper">
-						{materialsList.length > 0 ? (
-							materialsList.map(material => {
-								return <Material {...material} type={this.state.materialType} key={Math.random()} />;
-							})
-						) : (
-							<span className="not-found">
-								{this.state.searchStatement ? (
-									`Материалов по запросу ${this.state.searchStatement} не найдено`
-								) : (
-									"Материалы в данном разделе отсутствуют"
-								)}
-							</span>
-						)}
-					</div>
-				</ScrollArea>
+				<div className="materials-wrapper">
+					{materialsList.length > 0 ? (
+						materialsList.map(material => {
+							return <Material {...material} type={this.state.materialType} key={Math.random()} />;
+						})
+					) : (
+						<span className="not-found">
+							{this.state.searchStatement ? (
+								`Материалов по запросу ${this.state.searchStatement} не найдено`
+							) : (
+								"Материалы в данном разделе отсутствуют"
+							)}
+						</span>
+					)}
+				</div>
 				<div className="data-controls styled-block content-block column nowrap">
 					<span className="data-title">Поиск в списке по заголовкам</span>
 					<input

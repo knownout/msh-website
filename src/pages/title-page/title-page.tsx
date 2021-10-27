@@ -104,10 +104,17 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 		articlesList = articlesList.filter(e => e.meta.content.blocks.length > 0);
 
 		const bgImage = { backgroundImage: `url("${this.state.mainArticleData.preview}")` } as React.CSSProperties;
-		const articlesListPreviewText = articlesList.map(e => {
-			const block = e.meta.content.blocks.filter((i: any) => i.type == "paragraph")[0];
-			return { blocks: [ block ] } as DataProp;
-		});
+		const articlesListPreviewText = articlesList
+			.map(e => {
+				try {
+					const block = e.meta.content.blocks.filter((i: any) => i.type == "paragraph")[0];
+					if (!block) return null;
+					return { blocks: [ block ] } as DataProp;
+				} catch (e) {
+					return null;
+				}
+			})
+			.filter(e => e !== null) as any;
 
 		return (
 			<PageWrapper {...this.props} loaded={this.state.loaded} id="title-page" exception={this.state.exception}>
@@ -116,20 +123,13 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 						<div className="content-block row main-article-wrapper">
 							<div className="bg-image" style={bgImage} />
 							<div className="content-block row limited">
-								<div
-									className="content-block row"
-									id="main-article"
-									style={bgImage}
-									onClick={() => {
-										try {
-											window.location.href = "news/" + this.state.mainPageData.meta.main_article;
-										} catch (e) {}
-									}}
-								>
-									<div className="content-block column text-content">
-										<span className="date">{getTextTime(this.state.mainArticleData.date)}</span>
-										<span className="title">{this.state.mainArticleData.title}</span>
-									</div>
+								<div className="content-block row" id="main-article" style={bgImage}>
+									<a className="ddt" href={"news/" + this.state.mainPageData.meta.main_article}>
+										<div className="content-block column text-content">
+											<span className="date">{getTextTime(this.state.mainArticleData.date)}</span>
+											<span className="title">{this.state.mainArticleData.title}</span>
+										</div>
+									</a>
 								</div>
 								<div className="content-block column" id="main-document">
 									<span className="block-title">Важная информация</span>
@@ -140,37 +140,44 @@ export default class TitlePage extends React.Component<ITitlePageProps, ITitlePa
 							</div>
 						</div>
 						<div className="content-block row" id="latest-articles">
-							<ScrollMenu childrenWidth={340}>
+							<ScrollMenu childrenWidth={344}>
 								{articlesList.map((e, i) => {
-									return (
-										<div
-											className="article content-block column"
-											key={Math.random()}
-											data-bg={!!e.meta.preview}
-											onClick={() => {
-												window.location.href =
-													"news/" + this.state.mainPageData.meta.articles[i];
-											}}
-										>
-											{e.meta.preview && (
+									if (articlesListPreviewText[i])
+										return (
+											<a
+												className="ddt"
+												href={"news/" + this.state.mainPageData.meta.articles[i]}
+												key={Math.random()}
+											>
 												<div
-													className="bg-image"
-													style={{ backgroundImage: `url(${e.meta.preview})` }}
-												/>
-											)}
+													className="article content-block column"
+													data-bg={!!e.meta.preview}
+												>
+													{e.meta.preview && (
+														<div
+															className="bg-image"
+															style={{ backgroundImage: `url(${e.meta.preview})` }}
+														/>
+													)}
 
-											<div className="content">
-												{<Blocks data={articlesListPreviewText[i]} />}
-											</div>
+													<div className="content">
+														{<Blocks data={articlesListPreviewText[i]} />}
+													</div>
 
-											<span className="date">{getTextTime(e.meta.content.time as number)}</span>
-											<span className="title">{e.meta.content.title}</span>
-										</div>
-									);
+													<span className="date">
+														{getTextTime(e.meta.content.time as number)}
+													</span>
+													<span className="title">{e.meta.content.title}</span>
+												</div>
+											</a>
+										);
+									else return null;
 								})}
 							</ScrollMenu>
 							<div className="button-wrapper">
-								<div className="button">Архив новостей</div>
+								<a className="ddt" href="/pages/информация_новости">
+									<div className="button">Архив новостей</div>
+								</a>
 							</div>
 						</div>
 					</React.Fragment>

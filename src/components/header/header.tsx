@@ -35,6 +35,7 @@ export function Logotype (props: {
 
 interface IHeaderProps {
 	element: React.RefObject<HTMLDivElement>;
+	setMobileMenuState: (state: boolean) => void;
 }
 interface IHeaderState {
 	titleTextLength: "short" | "middle" | "full";
@@ -130,7 +131,9 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
 					<div className="content-block column" id="title-buttons">
 						<div className="content-block row" id="buttons-holder">
 							<div className="button volumetric">Виртуальная приемная</div>
-							<div className="button volumetric">Горячие линии</div>
+							<a className="ddt" href="/pages/горячие_линии">
+								<div className="button volumetric">Горячие линии</div>
+							</a>
 						</div>
 						<Icon icon="phone-call" className="right">
 							{configuration.contacts.phone}
@@ -141,7 +144,10 @@ export default class Header extends React.Component<IHeaderProps, IHeaderState> 
 						id="mobile-menu"
 						is-open={this.state.mobileMenu.toString()}
 						is-active={this.state.mobileMenuOpen.toString()}
-						onClick={() => this.setState({ mobileMenuOpen: !this.state.mobileMenuOpen })}
+						onClick={() =>
+							this.setState({ mobileMenuOpen: !this.state.mobileMenuOpen }, () => {
+								this.props.setMobileMenuState(this.state.mobileMenuOpen);
+							})}
 					>
 						<div className="hamburger-line" />
 					</div>

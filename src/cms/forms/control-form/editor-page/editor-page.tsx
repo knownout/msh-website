@@ -321,6 +321,7 @@ export default class Editor extends React.Component<Editor.IProps, Editor.IState
 				const key = Object.keys(tagsList.meta.content)[i] as any;
 				const value = Object.values(tagsList.meta.content)[i] as any;
 
+				console.log(value);
 				if (value.documents.includes(uuid.identifier) || value.news.includes(uuid.identifier))
 					includes.push(key);
 			}

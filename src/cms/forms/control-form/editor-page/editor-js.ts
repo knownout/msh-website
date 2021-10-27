@@ -8,11 +8,35 @@ const Marker = require("@editorjs/marker");
 const InlineCode = require("@editorjs/inline-code");
 const Image = require("@editorjs/image");
 const Delimiter = require("@editorjs/delimiter");
+const Table = require("@editorjs/table");
+const AttachesTool = require("@editorjs/attaches");
 
 import EditorJS, { API, BlockAPI, EditorConfig, LogLevels, OutputData } from "@editorjs/editorjs";
+import { configuration } from "../../../../utils";
 
 const EditorJSToolConfiguration = {
 	tools: {
+		attaches: {
+			class: AttachesTool,
+			config: {
+				uploader: {
+					async uploadByFile (file: any) {
+						console.log(file);
+						const data = new FormData();
+						data.append("file", file as File);
+
+						const res = fetch(configuration.api.server_path + "api/uploadAttach.php", {
+							method: "POST",
+							body: data
+						}).then(res => res.json());
+
+						console.log(res);
+						return res;
+					}
+				}
+			}
+		},
+
 		header: {
 			class: Header,
 			config: {
@@ -21,6 +45,11 @@ const EditorJSToolConfiguration = {
 				placeholder: "Введите заголовок"
 			},
 			tunes: [ "align" ]
+		},
+
+		table: {
+			class: Table,
+			inlineToolbar: [ "bold", "italic", "link", "marker", "inlineCode" ]
 		},
 
 		image: {
